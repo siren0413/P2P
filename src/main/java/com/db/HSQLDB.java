@@ -32,7 +32,7 @@ public class HSQLDB {
 		
 	}
 	public static Connection getConnection() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:hsqldb:file:hsqldb/db", "sa", "");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:hsqldb/db", "SA", "");
 		return conn;
 	}
 
