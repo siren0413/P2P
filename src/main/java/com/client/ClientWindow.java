@@ -1,6 +1,7 @@
-package com.frame;
+package com.client;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -8,9 +9,14 @@ import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
+
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,24 +24,32 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
 import java.awt.Insets;
+
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
+
 import java.awt.Component;
+
 import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JFileChooser;
 
 import com.db.HSQLDB;
+import com.rmi.api.IRegister;
+import com.rmi.api.impl.Register;
 
 import java.awt.Button;
+
 import javax.swing.JTextField;
 
-public class Window {
+public class ClientWindow {
 
 	private JFrame frame;
 	private JTextArea textArea;
-	private static Window instance;
+	private static ClientWindow instance;
 	/**
 	 * @wbp.nonvisual location=43,629
 	 */
@@ -52,7 +66,7 @@ public class Window {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Window window = Window.getInstance();
+					ClientWindow window = ClientWindow.getInstance();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,30 +75,15 @@ public class Window {
 		});
 
 		HSQLDB.initDB();
+		
+		try {
+			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
+			register.register("1111", "haha.txt");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 
-		// try {
-		// Class.forName("org.hsqldb.jdbcDriver");
-		// Connection conn =
-		// DriverManager.getConnection("jdbc:hsqldb:file:db/temp","sa","");
-		// try {
-		// Statement statement = conn.createStatement();
-		// statement.executeUpdate("create table customer(id integer not null primary key,firstname varchar,lastname varchar)");
-		// for (int i = 10; i < 20; i++) {
-		// statement.executeUpdate("insert into customer values(" + i +
-		// ",'liu','zhaoyang')");
-		// }
-		// statement.close();
-		// statement = conn.createStatement();
-		// ResultSet set = statement.executeQuery("select * from customer");
-		// while(set.next()) {
-		// System.out.println(set.getString(2));
-		// }
-		// statement.close();
-		// } catch (SQLException ex) {
-		// }
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 
 	}
 	
@@ -93,7 +92,7 @@ public class Window {
 	/**
 	 * Create the application.
 	 */
-	 private Window() {
+	 private ClientWindow() {
 		initialize();
 	}
 
@@ -170,9 +169,9 @@ public class Window {
 		return fileChooser;
 	}
 
-	public static Window getInstance() {
+	public static ClientWindow getInstance() {
 		if(instance == null) {
-			instance = new Window();
+			instance = new ClientWindow();
 		}
 		return instance;
 	}

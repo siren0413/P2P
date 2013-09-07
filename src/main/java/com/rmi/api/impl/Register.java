@@ -9,20 +9,21 @@ import javax.swing.LookAndFeel;
 
 import org.apache.log4j.Logger;
 
+import com.client.ClientWindow;
 import com.dao.RegisterDAO;
-import com.frame.Window;
 import com.rmi.api.IRegister;
 
 @SuppressWarnings("serial")
 public class Register extends UnicastRemoteObject implements IRegister {
 
-	private Logger LOGGER = Logger.getLogger(Register.class);
-	private RegisterDAO registerDAO = new RegisterDAO();
-	
-	protected Register() throws RemoteException {
+	public Register() throws RemoteException {
 		super();
 	}
 
+	private Logger LOGGER = Logger.getLogger(Register.class);
+	private RegisterDAO registerDAO = new RegisterDAO();
+	
+	
 	public boolean register(String regPort, String fileName) {
 		String clienthost;
 		try {
