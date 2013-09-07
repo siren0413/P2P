@@ -16,6 +16,8 @@ import com.rmi.api.IRegister;
 @SuppressWarnings("serial")
 public class Register extends UnicastRemoteObject implements IRegister {
 
+	private ClientWindow window = ClientWindow.getInstance();
+	
 	public Register() throws RemoteException {
 		super();
 	}
