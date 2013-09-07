@@ -29,6 +29,7 @@ import javax.swing.JFileChooser;
 import com.db.HSQLDB;
 
 import java.awt.Button;
+import javax.swing.JTextField;
 
 public class Window {
 
@@ -154,7 +155,7 @@ public class Window {
 
 			}
 		});
-		btnNewButton.setBounds(41, 294, 98, 26);
+		btnNewButton.setBounds(579, 318, 98, 26);
 		panel.add(btnNewButton);
 	}
 
