@@ -37,7 +37,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JFileChooser;
 
-import com.db.HSQLDB;
+import com.db.PeerDB.PeerHSQLDB;
 import com.rmi.api.IRegister;
 import com.rmi.api.impl.Register;
 
@@ -74,7 +74,7 @@ public class ClientWindow {
 			}
 		});
 
-		HSQLDB.initDB();
+		PeerHSQLDB.initDB();
 		
 		try {
 			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
