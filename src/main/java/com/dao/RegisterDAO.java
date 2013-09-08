@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import javax.annotation.Generated;
 
-import com.db.HSQLDB;
+import com.db.ServerDB.ServerHSQLDB;
 import com.util.ID_Generator;
 
 public class RegisterDAO {
@@ -21,7 +21,7 @@ public class RegisterDAO {
 	public boolean addClient(String ip, String port, String fileName) {
 		
 		try {
-		    conn = HSQLDB.getConnection();
+		    conn = ServerHSQLDB.getConnection();
 			String id = ID_Generator.generateID();
 			String sql = "insert into RegistryInfo values (?,?,?,?)";
 			stmt = conn.prepareStatement(sql);

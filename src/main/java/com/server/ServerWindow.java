@@ -5,7 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
-import com.db.HSQLDB;
+import com.db.ServerDB.ServerHSQLDB;
 import com.rmi.api.impl.Register;
 
 import java.awt.BorderLayout;
@@ -43,7 +43,7 @@ public class ServerWindow {
 			}
 		});
 		
-		HSQLDB.initDB();
+		ServerHSQLDB.initDB();
 		//*************************************//
 		
 		
@@ -88,7 +88,7 @@ public class ServerWindow {
 					textArea.append("Index server is running...");
 					
 					Thread.sleep(10000);
-					Connection conn = HSQLDB.getConnection();
+					Connection conn = ServerHSQLDB.getConnection();
 					Statement stmt = conn.createStatement();
 					ResultSet result = stmt.executeQuery("select * from RegistryInfo");
 					while(result.next()) {
