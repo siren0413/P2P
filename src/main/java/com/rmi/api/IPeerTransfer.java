@@ -1,6 +1,8 @@
 package com.rmi.api;
 
-public interface IPeerTransfer {
+import java.rmi.Remote;
+
+public interface IPeerTransfer extends Remote{
 
 	public byte[] obtain(String fileName);
 	
