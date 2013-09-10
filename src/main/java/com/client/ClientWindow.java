@@ -92,15 +92,13 @@ public class ClientWindow {
 		PeerHSQLDB.initDB();
 
 		
-		try {
-			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
-			register.registerPeer("1111");
-//			Thread.sleep(10000);
-			register.registerFile("haha.txt");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+//		try {
+//			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
+//			register.registerPeer("1111");
+//			register.registerFile("haha.txt");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} 
 	
 
 	}
@@ -201,6 +199,8 @@ public class ClientWindow {
 					}
 
 					IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
+					register.registerPeer("1111");
+					register.registerFile("haha.txt");
 					textArea.append(SystemUtil.getSimpleTime() + "Connected to server [" + serverIP + ":" + serverPort
 							+ "] successfully!\n");
 					textField_serverIP.setEnabled(false);
@@ -208,7 +208,6 @@ public class ClientWindow {
 					connected = true;
 					btnConnect.setEnabled(false);
 					//btnConnect.setText("disconnect");
-					
 					// register.register("1111", "haha.txt");
 
 				} catch (ConnectException e1) {
