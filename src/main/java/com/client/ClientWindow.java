@@ -14,6 +14,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.Insets;
 
 import javax.swing.JButton;
@@ -40,24 +43,36 @@ import javax.swing.JFileChooser;
 import com.db.PeerDB.PeerHSQLDB;
 import com.rmi.api.IRegister;
 import com.rmi.api.impl.Register;
+import com.util.SystemUtil;
 
 import java.awt.Button;
 
 import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 public class ClientWindow {
 
 	private JFrame frame;
 	private JTextArea textArea;
 	private static ClientWindow instance;
-	/**
-	 * @wbp.nonvisual location=43,629
-	 */
 	private final JOptionPane optionPane = new JOptionPane();
-	/**
-	 * @wbp.nonvisual location=114,629
-	 */
 	private final JFileChooser fileChooser = new JFileChooser();
+	private JTextField textField_serverIP;
+	private JTextField textField_serverPort;
+
+	// regular expression
+	private Pattern pattern;
+	private Matcher matcher;
+	private final String IP_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+	private final String PORT_PATTERN = "^[\\d]{2,5}$";
+
+	// default value
+	private final String default_IP = "192.168.1.125";
+	private final String default_port = "1099";
+
+	// status
+	private boolean connected = false;
 
 	/**
 	 * Launch the application.
@@ -75,6 +90,7 @@ public class ClientWindow {
 		});
 
 		PeerHSQLDB.initDB();
+
 		
 		try {
 			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
@@ -87,15 +103,12 @@ public class ClientWindow {
 		} 
 	
 
-
 	}
-	
-	
 
 	/**
 	 * Create the application.
 	 */
-	 private ClientWindow() {
+	private ClientWindow() {
 		initialize();
 	}
 
@@ -157,10 +170,83 @@ public class ClientWindow {
 
 			}
 		});
-		btnNewButton.setBounds(579, 318, 98, 26);
+		btnNewButton.setBounds(623, 290, 98, 26);
 		panel.add(btnNewButton);
-	}
 
+		textField_serverIP = new JTextField();
+		textField_serverIP.setText(default_IP);
+		textField_serverIP.setBounds(79, 261, 122, 28);
+		panel.add(textField_serverIP);
+		textField_serverIP.setColumns(10);
+
+		final JButton btnConnect = new JButton("connect");
+		btnConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					String serverIP = textField_serverIP.getText();
+					String serverPort = textField_serverPort.getText();
+
+					pattern = Pattern.compile(IP_PATTERN);
+					matcher = pattern.matcher(serverIP);
+					if (!matcher.matches()) {
+						JOptionPane.showMessageDialog(frame, "The IP address is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					pattern = Pattern.compile(PORT_PATTERN);
+					matcher = pattern.matcher(serverPort);
+					if (!matcher.matches()) {
+						JOptionPane.showMessageDialog(frame, "The port is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
+					textArea.append(SystemUtil.getSimpleTime() + "Connected to server [" + serverIP + ":" + serverPort
+							+ "] successfully!\n");
+					textField_serverIP.setEnabled(false);
+					textField_serverPort.setEnabled(false);
+					connected = true;
+					btnConnect.setEnabled(false);
+					//btnConnect.setText("disconnect");
+					
+					// register.register("1111", "haha.txt");
+
+				} catch (ConnectException e1) {
+					JOptionPane.showMessageDialog(frame, "unable to connect to server!\nplease make sure the address is correct",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				} catch (MalformedURLException e1) {
+					JOptionPane.showMessageDialog(frame, "unable to connect to server!\nplease make sure the address is correct",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				} catch (RemoteException e1) {
+					JOptionPane.showMessageDialog(frame, "unknown server error! \nplease try again later", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				} catch (NotBoundException e1) {
+					JOptionPane.showMessageDialog(frame, "unable to connect to server!\nplease make sure the address is correct",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+		btnConnect.setBounds(326, 262, 117, 29);
+		panel.add(btnConnect);
+
+		textField_serverPort = new JTextField();
+		textField_serverPort.setText(default_port);
+		textField_serverPort.setBounds(245, 261, 66, 28);
+		panel.add(textField_serverPort);
+		textField_serverPort.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Server IP");
+		lblNewLabel.setBounds(19, 267, 61, 16);
+		panel.add(lblNewLabel);
+		
+		JLabel lblPort = new JLabel("Port");
+		lblPort.setBounds(213, 267, 61, 16);
+		panel.add(lblPort);
+	}
 	public JTextArea getTextArea() {
 		return textArea;
 	}
@@ -173,7 +259,7 @@ public class ClientWindow {
 	}
 
 	public static ClientWindow getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new ClientWindow();
 		}
 		return instance;
