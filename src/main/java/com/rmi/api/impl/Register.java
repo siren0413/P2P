@@ -26,7 +26,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 	private RegisterDAO registerDAO = new RegisterDAO();
 	
 	
-	public boolean register(String regPort, String fileName) {
+	public boolean registerPeer(String regPort) {
 		String clienthost;
 		try {
 			// get client IP address
@@ -35,7 +35,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			String clentIp = ia.getHostAddress();
 			LOGGER.info("Received client registry request. client IP[" + clentIp + "]");
 			
-			boolean result = registerDAO.addClient(clienthost, regPort, fileName);
+			boolean result = registerDAO.addPeer(clentIp, regPort);
 			if(!result)
 				LOGGER.warn("Client registry failed!");
 			else {
@@ -51,6 +51,28 @@ public class Register extends UnicastRemoteObject implements IRegister {
 
 	public boolean unRegister() {
 		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean registerFile(String fileName) throws RemoteException {
+		String clienthost;
+		try {
+			// get client IP address
+			clienthost = RemoteServer.getClientHost();
+			InetAddress ia = java.net.InetAddress.getByName(clienthost);
+			String clentIp = ia.getHostAddress();
+			LOGGER.info("Received client add file request. client IP[" + clentIp + "]");
+			
+			boolean result = registerDAO.addFile(clentIp, fileName);
+			if(!result)
+				LOGGER.warn("Client add file failed !");
+			else 
+				return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			LOGGER.warn("Client add file failed !");
+		}
 		return false;
 	}
 

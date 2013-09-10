@@ -9,8 +9,6 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-
-
 public class PeerHSQLDB {
 
 	private static Logger LOGGER = Logger.getLogger(PeerHSQLDB.class);

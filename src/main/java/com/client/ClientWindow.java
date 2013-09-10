@@ -78,7 +78,9 @@ public class ClientWindow {
 		
 		try {
 			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
-			register.register("1111", "haha.txt");
+			register.registerPeer("1111");
+//			Thread.sleep(10000);
+			register.registerFile("haha.txt");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
