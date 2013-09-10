@@ -32,6 +32,8 @@ public class PeerHSQLDB {
 					stat.close();
 				}
 				
+			} catch (SQLException e) {
+				LOGGER.debug("initialization exception:",e);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
