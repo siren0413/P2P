@@ -91,6 +91,7 @@ public class Peer {
 				window.getProgressBar().setVisible(true);
 				window.getProgressBar().setStringPainted(true);
 				
+				window.getTextArea().append(SystemUtil.getSimpleTime()+"Start downloading...\n");
 				while(left>0) {
 					Thread.sleep(1000);
 					buffer = peerTransfer.obtain(fileName, start, 1024*Integer.valueOf(window.getTextField_DownloadLimit().getText()));
@@ -100,18 +101,18 @@ public class Peer {
 					window.getProgressBar().setValue(start);
 					window.getProgressBar().setIndeterminate(false);
 					window.getProgressBar().repaint();
-					int percent = (int)(100 * ((double) start / (double)length));
-					window.getTextArea().append(SystemUtil.getSimpleTime()+" downloading..."+percent+"%\n");
 				}
 				out.close();
+				
 			}
 			LOGGER.info("download file successfully!");
-			window.getTextArea().append(SystemUtil.getSimpleTime()+" Download complete!\n");
+			window.getTextArea().append(SystemUtil.getSimpleTime()+"Download complete!\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(window.getFrame(), e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 
+		window.getProgressBar().setVisible(false);
 		return true;
 	}
 	

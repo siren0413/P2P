@@ -27,7 +27,7 @@ public class ServerHSQLDB {
 			String fileInfoTable = "FileInfo";
 			String createPeerInfo = "CREATE TABLE       "+peerInfoTable + " (" + "id         VARCHAR    NOT NULL           primary key,"
 					+ "ip         VARCHAR      NOT NULL			," + "port       VARCHAR         NOT NULL, "
-					+ " constraint peer_id_unique UNIQUE ( id )"+ ")";
+					+ " constraint peer_id_unique UNIQUE ( ip )"+ ")";
 			
 			String createFileInfo = "CREATE TABLE       " + fileInfoTable + "  (" 
 					+" peer_id  		VARCHAR 	NOT NULL, " +  "	file_name 	VARCHAR 	NOT NULL,"    

@@ -91,26 +91,26 @@ public class ServerWindow {
 					
 					textArea.append("Index server is running...");
 					
-					Thread.sleep(10000);
-					Connection conn = ServerHSQLDB.getConnection();
-					Statement stmt = conn.createStatement();
-	//				ResultSet result = stmt.executeQuery("select * from PeerInfo");
-					ResultSet result = stmt.executeQuery("select * from PeerInfo where ip like '192.168.1.61'");
-					while(result.next()) {
-						String id = result.getString(1);
-						String ip = result.getString(2);
-						String port = result.getString(3);
-
-						System.out.println("id["+id+"] ip["+ip+"] port["+port+"]");
-					}
-					
-					 result = stmt.executeQuery("select * from FileInfo");
-					while(result.next()) {
-						String peer_id = result.getString(1);
-						String file_name = result.getString(2);
-					
-						System.out.println("id["+peer_id+"] ip["+file_name+"]");
-					}
+//					Thread.sleep(10000);
+//					Connection conn = ServerHSQLDB.getConnection();
+//					Statement stmt = conn.createStatement();
+//	//				ResultSet result = stmt.executeQuery("select * from PeerInfo");
+//					ResultSet result = stmt.executeQuery("select * from PeerInfo where ip like '192.168.1.61'");
+//					while(result.next()) {
+//						String id = result.getString(1);
+//						String ip = result.getString(2);
+//						String port = result.getString(3);
+//
+//						System.out.println("id["+id+"] ip["+ip+"] port["+port+"]");
+//					}
+//					
+//					 result = stmt.executeQuery("select * from FileInfo");
+//					while(result.next()) {
+//						String peer_id = result.getString(1);
+//						String file_name = result.getString(2);
+//					
+//						System.out.println("id["+peer_id+"] ip["+file_name+"]");
+//					}
 					
 				} catch (Exception e1) {
 					e1.printStackTrace();

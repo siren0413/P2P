@@ -4,20 +4,13 @@ import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.UnicastRemoteObject;
-
-import javax.swing.LookAndFeel;
-
 import org.apache.log4j.Logger;
-
-import com.client.ClientWindow;
 import com.dao.ServerDAO;
 import com.rmi.api.IRegister;
 
 @SuppressWarnings("serial")
 public class Register extends UnicastRemoteObject implements IRegister {
 
-	private ClientWindow window = ClientWindow.getInstance();
-	
 	public Register() throws RemoteException {
 		super();
 	}
@@ -35,14 +28,18 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			String clentIp = ia.getHostAddress();
 			LOGGER.info("Received peer registry request. client IP[" + clentIp + "]");
 			
-			boolean result = serverDAO.addPeer(clentIp, regPort);
-			if(!result)
-				LOGGER.warn("Client registry failed!");
-			else {
-				LOGGER.info("Registered peer ip["+clentIp+"] service port["+regPort+"] successfully!");
-				return true;
+			String peer_id = serverDAO.getPeerID(clentIp);
+			if(peer_id==null) {
+				boolean result = serverDAO.addPeer(clentIp, regPort);
+				if(!result)
+					LOGGER.warn("Client registry failed!");
+				else {
+					LOGGER.info("Registered peer ip["+clentIp+"] service port["+regPort+"] successfully!");
+					return true;
+				}
 			}
 			
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.warn("Client registry failed!");

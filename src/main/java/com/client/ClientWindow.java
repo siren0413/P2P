@@ -58,6 +58,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import javax.swing.JProgressBar;
 import javax.swing.text.DefaultCaret;
+import java.awt.Font;
 
 public class ClientWindow {
 
@@ -176,7 +177,8 @@ public class ClientWindow {
 		DefaultCaret caret = (DefaultCaret) textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-		JButton btnNewButton = new JButton("Share Files");
+		final JButton btnNewButton = new JButton("Share Files");
+		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -207,7 +209,7 @@ public class ClientWindow {
 
 			}
 		});
-		btnNewButton.setBounds(19, 301, 122, 26);
+		btnNewButton.setBounds(19, 266, 122, 26);
 		panel.add(btnNewButton);
 
 		textField_serverIP = new JTextField();
@@ -215,6 +217,112 @@ public class ClientWindow {
 		textField_serverIP.setBounds(70, 189, 122, 28);
 		panel.add(textField_serverIP);
 		textField_serverIP.setColumns(10);
+		
+		textField_serverPort = new JTextField();
+		textField_serverPort.setText(default_port);
+		textField_serverPort.setBounds(236, 189, 66, 28);
+		panel.add(textField_serverPort);
+		textField_serverPort.setColumns(10);
+
+		JLabel lblNewLabel = new JLabel("Server IP");
+		lblNewLabel.setBounds(10, 195, 61, 16);
+		panel.add(lblNewLabel);
+
+		JLabel lblPort = new JLabel("Port");
+		lblPort.setBounds(204, 195, 61, 16);
+		panel.add(lblPort);
+
+		final JButton btnDownloadFiles = new JButton("Download Files");
+		btnDownloadFiles.setEnabled(false);
+		btnDownloadFiles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String fileName = textField_downloadFileName.getText();
+				if ("".equals(fileName)) {
+					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",
+						JOptionPane.ERROR_MESSAGE);
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+
+					// this.downloadPath =
+					// fc.getSelectedFile().getAbsolutePath();
+					// this.pathLabel.setText("默认路径：" + this.downloadPath);
+					final String path = fileChooser.getSelectedFile().getAbsolutePath();
+					File file = new File(path + File.separator + fileName);
+					if (file.exists()) {
+						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					label.setText("Saved Path: " + path);
+					Thread t = new Thread(new Runnable() {
+						public void run() {
+							peer.downloadFile(fileName, path + File.separator + fileName);
+						}
+					});
+					t.start();
+
+				}
+
+			}
+		});
+		btnDownloadFiles.setBounds(19, 303, 122, 26);
+		panel.add(btnDownloadFiles);
+
+		textField_downloadFileName = new JTextField();
+		textField_downloadFileName.setEnabled(false);
+		textField_downloadFileName.setColumns(10);
+		textField_downloadFileName.setBounds(151, 302, 122, 28);
+		panel.add(textField_downloadFileName);
+
+		progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
+		progressBar.setDoubleBuffered(true);
+		progressBar.setBounds(19, 340, 254, 20);
+		panel.add(progressBar);
+		progressBar.setVisible(false);
+
+		textField_downloadLimit = new JTextField();
+		textField_downloadLimit.setEnabled(false);
+		textField_downloadLimit.setText("1");
+		textField_downloadLimit.setColumns(10);
+		textField_downloadLimit.setBounds(388, 302, 45, 28);
+		panel.add(textField_downloadLimit);
+
+		label = new JLabel("");
+		label.setBounds(25, 383, 458, 46);
+		panel.add(label);
+
+		final JButton btnFileList = new JButton("File List");
+		btnFileList.setEnabled(false);
+		btnFileList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				peer.listServerFile();
+			}
+		});
+		btnFileList.setBounds(151, 266, 122, 26);
+		panel.add(btnFileList);
+		
+		JLabel lblBandwidth = new JLabel("Bandwidth");
+		lblBandwidth.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblBandwidth.setBounds(317, 302, 66, 28);
+		panel.add(lblBandwidth);
+		
+		JLabel lblKbs = new JLabel("KB/S");
+		lblKbs.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblKbs.setBounds(443, 301, 66, 28);
+		panel.add(lblKbs);
+		
+		final JButton btnClearScreen = new JButton("Clear Screen");
+		btnClearScreen.setEnabled(false);
+		btnClearScreen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textArea.setText("");
+			}
+		});
+		btnClearScreen.setBounds(662, 189, 122, 28);
+		panel.add(btnClearScreen);
 
 		final JButton btnConnect = new JButton("connect");
 		btnConnect.addActionListener(new ActionListener() {
@@ -262,17 +370,27 @@ public class ClientWindow {
 					peer.setPeer_service_port("2055");
 					peer.setServer_ip(serverIP);
 					peer.setServer_port(serverPort);
-
+					
+					// button enable
+					btnConnect.setEnabled(true);
+					btnNewButton.setEnabled(true);
+					btnDownloadFiles.setEnabled(true);
+					btnFileList.setEnabled(true);
+					btnClearScreen.setEnabled(true);
+					textField_downloadFileName.setEnabled(true);
+					textField_downloadLimit.setEnabled(true);
+					
+					
 					// start thread
 					Thread t = new Thread(new Runnable() {
 
 						public void run() {
 							while (true) {
 								try {
-									Thread.sleep(10000);
 									if(!peer.sendSignal()) {
 										peer.sendReport();
 									}
+									Thread.sleep(10000);
 
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -306,86 +424,7 @@ public class ClientWindow {
 		btnConnect.setBounds(317, 190, 117, 29);
 		panel.add(btnConnect);
 
-		textField_serverPort = new JTextField();
-		textField_serverPort.setText(default_port);
-		textField_serverPort.setBounds(236, 189, 66, 28);
-		panel.add(textField_serverPort);
-		textField_serverPort.setColumns(10);
-
-		JLabel lblNewLabel = new JLabel("Server IP");
-		lblNewLabel.setBounds(10, 195, 61, 16);
-		panel.add(lblNewLabel);
-
-		JLabel lblPort = new JLabel("Port");
-		lblPort.setBounds(204, 195, 61, 16);
-		panel.add(lblPort);
-
-		JButton btnDownloadFiles = new JButton("Download Files");
-		btnDownloadFiles.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				final String fileName = textField_downloadFileName.getText();
-				if ("".equals(fileName)) {
-					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",
-						JOptionPane.ERROR_MESSAGE);
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-
-					// this.downloadPath =
-					// fc.getSelectedFile().getAbsolutePath();
-					// this.pathLabel.setText("默认路径：" + this.downloadPath);
-					final String path = fileChooser.getSelectedFile().getAbsolutePath();
-					File file = new File(path + File.separator + fileName);
-					if (file.exists()) {
-						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					label.setText("Saved Path: " + path);
-					Thread t = new Thread(new Runnable() {
-						public void run() {
-							peer.downloadFile(fileName, path + File.separator + fileName);
-						}
-					});
-					t.start();
-
-				}
-
-			}
-		});
-		btnDownloadFiles.setBounds(19, 339, 122, 26);
-		panel.add(btnDownloadFiles);
-
-		textField_downloadFileName = new JTextField();
-		textField_downloadFileName.setColumns(10);
-		textField_downloadFileName.setBounds(152, 337, 122, 28);
-		panel.add(textField_downloadFileName);
-
-		progressBar = new JProgressBar();
-		progressBar.setStringPainted(true);
-		progressBar.setDoubleBuffered(true);
-		progressBar.setBounds(263, 457, 146, 20);
-		panel.add(progressBar);
-
-		textField_downloadLimit = new JTextField();
-		textField_downloadLimit.setText("1");
-		textField_downloadLimit.setColumns(10);
-		textField_downloadLimit.setBounds(38, 472, 122, 28);
-		panel.add(textField_downloadLimit);
-
-		label = new JLabel("");
-		label.setBounds(25, 383, 458, 46);
-		panel.add(label);
-
-		JButton btnFileList = new JButton("File List");
-		btnFileList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				peer.listServerFile();
-			}
-		});
-		btnFileList.setBounds(236, 271, 122, 26);
-		panel.add(btnFileList);
+		
 	}
 	public JTextArea getTextArea() {
 		return textArea;

@@ -32,6 +32,7 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 			clienthost = RemoteServer.getClientHost();
 			InetAddress ia = java.net.InetAddress.getByName(clienthost);
 			String clentIp = ia.getHostAddress();
+			LOGGER.info("sync peer["+clentIp+"] with server");
 			List<String> serverFileList = serverDAO.listFiles(clentIp);
 			HashSet<String> set = new HashSet<String>(serverFileList);
 			for(String peerFile:fileList) {
@@ -48,7 +49,7 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 				}
 			}
 			
-			
+			LOGGER.info("sync peer["+clentIp+"] successfully!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

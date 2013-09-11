@@ -154,7 +154,7 @@ public class ServerDAO {
 	} 
 	
 		
-	private String getPeerID(String clientIP) {
+	public String getPeerID(String clientIP) {
 		Statement stmt = null;
 		try {
 			conn = ServerHSQLDB.getConnection();
