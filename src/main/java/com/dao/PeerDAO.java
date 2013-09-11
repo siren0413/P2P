@@ -53,13 +53,12 @@ public class PeerDAO {
 		return false;
 	}
 	
-	public boolean deleteFile(String filePath ,String fileName) {
+	public boolean deleteFile(String fileName) {
 		try {
 			conn = PeerHSQLDB.getConnection();
-			String sql = "delete from PeerFiles where file_path like '?' and file_name like '?' ";
+			String sql = "delete from PeerFiles where file_name like '?' ";
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, filePath);
-			stmt.setString(2, fileName);
+			stmt.setString(1, fileName);
 		
 			stmt.executeUpdate();
 			
@@ -83,17 +82,16 @@ public class PeerDAO {
 	}
 	
 	
-	public boolean findFile(String filePath,String fileName) {
+	public String findFile(String fileName) {
 		try {
 			conn = PeerHSQLDB.getConnection();
-			String sql = "select * from PeerFiles where file_path like '?' and file_name like '?' ";
+			String sql = "select file_path from PeerFiles where file_name like '?' ";
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, filePath);
-			stmt.setString(2, fileName);
-		
-			stmt.executeUpdate();
+			stmt.setString(1, fileName);
+					
+			result = stmt.executeQuery();
 			
-			return true;
+			return result.getString(1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -109,6 +107,12 @@ public class PeerDAO {
 				}
 			}
 		}
+		return null;
+	}
+	
+	public boolean checkFileAvailable(String fileName) {
+		if(findFile(fileName)!=null)
+			return true;
 		return false;
 	}
 }
