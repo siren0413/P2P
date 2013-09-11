@@ -24,8 +24,9 @@ public class PeerHSQLDB {
 			Connection conn = getConnection();
 			String tableName = "PeerFiles";
 			String sql = "CREATE TABLE "+tableName + " (" + "id         VARCHAR    NOT NULL primary key,"
-					+ "file_path         VARCHAR                  NOT NULL," + "file_name       VARCHAR                   NOT NULL,"
-					+ "file_size	INT      NOT NULL" + ")";
+					+ "file_path         VARCHAR                  NOT NULL," + "file_name       VARCHAR     NOT NULL,"
+					+ "file_size	INT      NOT NULL, " 
+					+ " constraint unique_file_and_file_path UNIQUE ( file_path,file_size) )";
 			
 			try {
 				if(!checkTableExists(conn, tableName)) {
