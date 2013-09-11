@@ -11,12 +11,14 @@ import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
 
+import com.dao.PeerDAO;
 import com.rmi.api.IPeerTransfer;
 
 @SuppressWarnings("serial")
 public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 
 	private Logger LOGGER = Logger.getLogger(PeerTransfer.class); 
+	private PeerDAO peerDAO = new PeerDAO();
 
 	public PeerTransfer() throws RemoteException {
 		super();
@@ -57,7 +59,9 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 	}
 
 	public boolean checkFileAvailable(String fileName) throws RemoteException {
-		// TODO Auto-generated method stub
+	
+		
+		
 		return false;
 	}
 	
