@@ -6,7 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 
 import com.db.ServerDB.ServerHSQLDB;
+import com.rmi.api.impl.HeartBeat;
 import com.rmi.api.impl.Register;
+import com.rmi.api.impl.ServerTransfer;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -81,9 +83,12 @@ public class ServerWindow {
 				
 				// RMI registry
 				try {
+					
 					LocateRegistry.createRegistry(1099);
 					Register register = new Register();
 					Naming.rebind("register",register);
+					Naming.rebind("heartBeat",new HeartBeat());
+					Naming.rebind("serverTransfer", new ServerTransfer());
 					
 					textArea.append("Index server is running...");
 					
@@ -91,7 +96,7 @@ public class ServerWindow {
 					Connection conn = ServerHSQLDB.getConnection();
 					Statement stmt = conn.createStatement();
 	//				ResultSet result = stmt.executeQuery("select * from PeerInfo");
-					ResultSet result = stmt.executeQuery("select * from PeerInfo where ip like '192.168.1.61' ");
+					ResultSet result = stmt.executeQuery("select * from PeerInfo where ip like '192.168.1.61'");
 					while(result.next()) {
 						String id = result.getString(1);
 						String ip = result.getString(2);

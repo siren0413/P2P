@@ -18,7 +18,7 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 
 	private Logger LOGGER = Logger.getLogger(PeerTransfer.class); 
 
-	protected PeerTransfer() throws RemoteException {
+	public PeerTransfer() throws RemoteException {
 		super();
 	}
 
@@ -55,6 +55,13 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 		// get file path from database
 		return null;
 	}
+
+	public boolean checkFileAvailable(String fileName) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 	
 
 }
