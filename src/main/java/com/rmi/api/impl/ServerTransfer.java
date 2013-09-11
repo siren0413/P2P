@@ -1,13 +1,16 @@
 package com.rmi.api.impl;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.rmi.api.IServerTransfer;
 
-public class ServerTransfer implements IServerTransfer {
+public class ServerTransfer extends UnicastRemoteObject implements IServerTransfer {
 
-	public ServerTransfer() {
-
+	public ServerTransfer() throws RemoteException{
+		
 	}
 
 	public List<String> loopupFile(String fileName) {
