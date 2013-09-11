@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import com.dao.PeerDAO;
+import com.rmi.api.IHeartBeat;
 import com.rmi.api.IPeerTransfer;
 import com.rmi.api.IRegister;
 import com.rmi.api.IServerTransfer;
@@ -28,8 +29,6 @@ public class Peer {
 	private String peer_service_port;
 	private PeerDAO peerDAO;
 	
-	private final int BUFFER_SIZE = 1024;
-
 	// constructor
 	public Peer(ClientWindow window) {
 		this.window = window;
@@ -81,6 +80,8 @@ public class Peer {
 				int start = 0;
 				int left = length;
 				
+				LOGGER.debug("file length ["+length+"]");
+				
 				File file = new File(savePath);
 				OutputStream out = new FileOutputStream(file);
 				byte[] buffer;
@@ -89,7 +90,6 @@ public class Peer {
 				window.getProgressBar().setVisible(true);
 				window.getProgressBar().setStringPainted(true);
 				
-				//label
 				while(left>0) {
 					Thread.sleep(1000);
 					buffer = peerTransfer.obtain(fileName, start, 1024*Integer.valueOf(window.getTextField_DownloadLimit().getText()));
@@ -101,12 +101,11 @@ public class Peer {
 					window.getProgressBar().repaint();
 					int percent = (int)(100 * ((double) start / (double)length));
 					window.getTextArea().append(SystemUtil.getSimpleTime()+" downloading..."+percent+"%\n");
-					// label
 				}
 				out.close();
-				// label
 			}
 			LOGGER.info("download file successfully!");
+			window.getTextArea().append(SystemUtil.getSimpleTime()+" Download complete!\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(window.getFrame(), e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -114,6 +113,25 @@ public class Peer {
 
 		return true;
 	}
+	
+	
+	public boolean sendSignal() {
+		try {
+			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
+			
+			//heartBeat.signal(MD5_array)
+			
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
 
 	// getter and setter
 	public String getServer_ip() {

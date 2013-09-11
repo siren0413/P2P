@@ -108,6 +108,25 @@ public class ClientWindow {
 		});
 
 		PeerHSQLDB.initDB();
+		
+		Thread t = new Thread(new Runnable() {
+			
+			public void run() {
+				try {
+					Thread.sleep(10000);
+					
+					
+					
+					
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		t.start();
 
 		// try {
 		// IRegister register =
@@ -161,16 +180,16 @@ public class ClientWindow {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(0, 0, 804, 255);
+		scrollPane.setBounds(0, 0, 794, 178);
 		panel.add(scrollPane);
-
-		textArea = new JTextArea();
-		scrollPane.setViewportView(textArea);
-		textArea.setMargin(new Insets(0, 5, 0, 0));
-		textArea.setWrapStyleWord(true);
-		textArea.setLineWrap(true);
-		textArea.setEditable(false);
-		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+		
+				textArea = new JTextArea();
+				scrollPane.setViewportView(textArea);
+				textArea.setMargin(new Insets(0, 5, 0, 0));
+				textArea.setWrapStyleWord(true);
+				textArea.setLineWrap(true);
+				textArea.setEditable(false);
+				DefaultCaret caret = (DefaultCaret)textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
 		JButton btnNewButton = new JButton("Share Files");
@@ -209,7 +228,7 @@ public class ClientWindow {
 
 		textField_serverIP = new JTextField();
 		textField_serverIP.setText(default_IP);
-		textField_serverIP.setBounds(79, 261, 122, 28);
+		textField_serverIP.setBounds(70, 189, 122, 28);
 		panel.add(textField_serverIP);
 		textField_serverIP.setColumns(10);
 
@@ -282,21 +301,21 @@ public class ClientWindow {
 				}
 			}
 		});
-		btnConnect.setBounds(326, 262, 117, 29);
+		btnConnect.setBounds(317, 190, 117, 29);
 		panel.add(btnConnect);
 
 		textField_serverPort = new JTextField();
 		textField_serverPort.setText(default_port);
-		textField_serverPort.setBounds(245, 261, 66, 28);
+		textField_serverPort.setBounds(236, 189, 66, 28);
 		panel.add(textField_serverPort);
 		textField_serverPort.setColumns(10);
 
 		JLabel lblNewLabel = new JLabel("Server IP");
-		lblNewLabel.setBounds(19, 267, 61, 16);
+		lblNewLabel.setBounds(10, 195, 61, 16);
 		panel.add(lblNewLabel);
 
 		JLabel lblPort = new JLabel("Port");
-		lblPort.setBounds(213, 267, 61, 16);
+		lblPort.setBounds(204, 195, 61, 16);
 		panel.add(lblPort);
 
 		JButton btnDownloadFiles = new JButton("Download Files");
@@ -324,7 +343,7 @@ public class ClientWindow {
 					label.setText("Saved Path: " + path);
 					Thread t = new Thread(new Runnable() {
 						public void run() {
-							boolean result = peer.downloadFile(fileName, path + File.separator + fileName);
+							peer.downloadFile(fileName, path + File.separator + fileName);
 						}
 					});
 					t.start();
@@ -347,15 +366,25 @@ public class ClientWindow {
 		progressBar.setBounds(263, 457, 146, 20);
 		panel.add(progressBar);
 
-		label = new JLabel("");
-		label.setBounds(29, 377, 743, 48);
-		panel.add(label);
-
 		textField_downloadLimit = new JTextField();
-		textField_downloadLimit.setText("10");
+		textField_downloadLimit.setText("1");
 		textField_downloadLimit.setColumns(10);
-		textField_downloadLimit.setBounds(409, 337, 122, 28);
+		textField_downloadLimit.setBounds(38, 472, 122, 28);
 		panel.add(textField_downloadLimit);
+		
+		label = new JLabel("");
+		label.setBounds(25, 383, 458, 46);
+		panel.add(label);
+		
+		JButton btnFileList = new JButton("File List");
+		btnFileList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+			}
+		});
+		btnFileList.setBounds(236, 271, 122, 26);
+		panel.add(btnFileList);
 	}
 	public JTextArea getTextArea() {
 		return textArea;

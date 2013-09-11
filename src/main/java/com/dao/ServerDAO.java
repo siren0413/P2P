@@ -193,4 +193,26 @@ public class ServerDAO {
 		
 		return null;
 	}
+	
+	public List<String> listFiles(String peer_ip){
+		List<String> fileList = new ArrayList<String>();
+		try {
+			conn = ServerHSQLDB.getConnection();
+			String sql = "select file_name from FileInfo where peer_id = (select id from PeerInfo where ip like '"+peer_ip+"' )";
+			Statement stmt = conn.createStatement();
+			result = stmt.executeQuery(sql);
+			while(result.next()) {
+				String fileName = result.getString(1);
+				fileList.add(fileName);
+			}
+		
+			if (fileList.size() !=0 )
+				return fileList;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 }
