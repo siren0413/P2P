@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
@@ -19,8 +20,10 @@ public class PeerDAO {
 	Connection conn;
 	PreparedStatement stmt;
 	ResultSet result;
+	Statement statement;
+	
 		
-	public boolean insertFile(String filePath,String fileName,Long fileSize) {
+	public boolean insertFile(String filePath,String fileName,int fileSize) {
 		
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -30,7 +33,7 @@ public class PeerDAO {
 			stmt.setString(1, id);
 			stmt.setString(2, filePath);
 			stmt.setString(3, fileName);
-			stmt.setLong(4, fileSize);
+			stmt.setInt(4, fileSize);
 		
 			stmt.executeUpdate();
 			
@@ -83,20 +86,20 @@ public class PeerDAO {
 	
 	
 	public String findFile(String fileName) {
+		
 		try {
 			conn = PeerHSQLDB.getConnection();
-			String sql = "select file_path from PeerFiles where file_name like '?' ";
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, fileName);
-					
-			result = stmt.executeQuery();
-			
-			return result.getString(1);
+		    statement = conn.createStatement();
+			String sql = "select file_path from PeerFiles where file_name like '"+fileName+ "'";
+			result = statement.executeQuery(sql);
+			while(result.next()) {
+				return result.getString(1);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			try {
-				stmt.close();
+				statement.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {

@@ -7,9 +7,9 @@ public interface IPeerTransfer extends Remote{
 	
 	public boolean checkFileAvailable(String fileName) throws RemoteException;
 
-	public byte[] obtain(String fileName) throws RemoteException;
+	public byte[] obtain(String fileName, int start, int length) throws RemoteException;
 	
-	public long getFileLength(String fileName) throws RemoteException;
+	public int getFileLength(String fileName) throws RemoteException;
 	
 	
 }

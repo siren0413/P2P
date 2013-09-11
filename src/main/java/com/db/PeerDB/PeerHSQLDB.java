@@ -25,17 +25,19 @@ public class PeerHSQLDB {
 			String tableName = "PeerFiles";
 			String sql = "CREATE TABLE "+tableName + " (" + "id         VARCHAR    NOT NULL primary key,"
 					+ "file_path         VARCHAR                  NOT NULL," + "file_name       VARCHAR                   NOT NULL,"
-					+ "file_size	long      NOT NULL" + ")";
+					+ "file_size	INT      NOT NULL" + ")";
 			
 			try {
 				if(!checkTableExists(conn, tableName)) {
+					LOGGER.info("Table "+ tableName + " dose not exits.");
 					Statement stat = conn.createStatement();
 					stat.executeUpdate(sql);
 					stat.close();
+					LOGGER.info("Table " + tableName + " creates successfully.");
 				}
 				
 			} catch (SQLException e) {
-				LOGGER.debug("initialization exception:",e);
+				LOGGER.error("initialization exception:",e);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -24,14 +24,15 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 		super();
 	}
 
-	public byte[] obtain(String fileName) throws RemoteException{
+	public byte[] obtain(String fileName, int start, int length) throws RemoteException{
 		// get byte[] from other peers;
 		try {
-			InputStream is = new FileInputStream(fileName);
+			String filePath = peerDAO.findFile(fileName);
+			InputStream is = new FileInputStream(filePath);
 			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-			int length = (int)getFileLength(fileName);
 			byte[] buffer = new byte[length];
 			int readSize;
+			is.skip(start);
 			if((readSize = is.read(buffer,0,length))!=-1) {
 				byteArray.write(buffer,0,readSize);
 			}
@@ -48,21 +49,18 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 				
 	}
 
-	public long getFileLength(String fileName) throws RemoteException {
-		File file = new File(fileName);
-		return file.length();
+	public int getFileLength(String fileName) throws RemoteException {
+		String filePath = peerDAO.findFile(fileName);
+		File file = new File(filePath);
+		return (int) file.length();
 	}
 	
 	public String getFilePath(String fileName) {
-		// get file path from database
-		return null;
+		return peerDAO.findFile(fileName);
 	}
 
 	public boolean checkFileAvailable(String fileName) throws RemoteException {
-	
-		
-		
-		return false;
+		return peerDAO.checkFileAvailable(fileName);
 	}
 	
 	
