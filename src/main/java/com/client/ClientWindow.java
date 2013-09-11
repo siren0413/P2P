@@ -110,6 +110,7 @@ public class ClientWindow {
 //		try {
 //			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
 //			register.registerPeer("1111");
+
 ////			Thread.sleep(10000);
 //			register.registerFile("haha.txt");
 //		} catch (Exception e) {
@@ -228,6 +229,7 @@ public class ClientWindow {
 					}
 
 					IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
+
 					// register service port
 					peerRegistry = LocateRegistry.createRegistry(2055);
 					Naming.rebind("peerTransfer", new PeerTransfer());
@@ -253,7 +255,6 @@ public class ClientWindow {
 					peer.setServer_port(serverPort);
 					
 					//btnConnect.setText("disconnect");
-					
 					// register.register("1111", "haha.txt");
 
 				} catch (ConnectException e1) {

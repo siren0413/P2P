@@ -33,12 +33,13 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			clienthost = RemoteServer.getClientHost();
 			InetAddress ia = java.net.InetAddress.getByName(clienthost);
 			String clentIp = ia.getHostAddress();
-			LOGGER.info("Received client registry request. client IP[" + clentIp + "]");
+			LOGGER.info("Received peer registry request. client IP[" + clentIp + "]");
 			
 			boolean result = registerDAO.addPeer(clentIp, regPort);
 			if(!result)
 				LOGGER.warn("Client registry failed!");
 			else {
+				LOGGER.info("Registered peer ip["+clentIp+"] service port["+regPort+"] successfully!");
 				return true;
 			}
 			
@@ -66,8 +67,10 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			boolean result = registerDAO.addFile(clentIp, fileName);
 			if(!result)
 				LOGGER.warn("Client add file failed !");
-			else 
+			else {
+				LOGGER.info("Added file["+fileName+"] successfully!");
 				return true;
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

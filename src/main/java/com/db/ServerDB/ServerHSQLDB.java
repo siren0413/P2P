@@ -9,9 +9,12 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-
-
 public class ServerHSQLDB {
+
+	/* Database for index server
+	 * There are two tables in there: 'PeerInfo' to save peer registry information 
+	 * and 'FileInfo' for peer files management.
+	 */
 
 	private static Logger LOGGER = Logger.getLogger(ServerHSQLDB.class);
 

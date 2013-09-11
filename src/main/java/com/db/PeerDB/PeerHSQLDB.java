@@ -10,6 +10,10 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 
 public class PeerHSQLDB {
+	/*
+	 * Database for Peer server/client
+	 * There is one table in the database called 'PeerFiles'.
+	 */
 
 	private static Logger LOGGER = Logger.getLogger(PeerHSQLDB.class);
 
@@ -18,10 +22,10 @@ public class PeerHSQLDB {
 		try {
 			Class.forName("org.hsqldb.jdbcDriver");
 			Connection conn = getConnection();
-			String tableName = "PeerInfo";
+			String tableName = "PeerFiles";
 			String sql = "CREATE TABLE "+tableName + " (" + "id         VARCHAR    NOT NULL primary key,"
-					+ "ip         VARCHAR                  NOT NULL," + "port       VARCHAR                   NOT NULL,"
-					+ "file_name  VARCHAR                  NOT NULL" + ")";
+					+ "file_path         VARCHAR                  NOT NULL," + "file_name       VARCHAR                   NOT NULL,"
+					+ "file_size	long      NOT NULL" + ")";
 			
 			try {
 				if(!checkTableExists(conn, tableName)) {
