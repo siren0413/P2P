@@ -44,6 +44,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFileChooser;
 
 import com.db.PeerDB.PeerHSQLDB;
+import com.rmi.api.IHeartBeat;
 import com.rmi.api.IRegister;
 import com.rmi.api.impl.PeerTransfer;
 import com.rmi.api.impl.Register;
@@ -108,25 +109,6 @@ public class ClientWindow {
 		});
 
 		PeerHSQLDB.initDB();
-		
-		Thread t = new Thread(new Runnable() {
-			
-			public void run() {
-				try {
-					Thread.sleep(10000);
-					
-					
-					
-					
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			}
-		});
-		
-		t.start();
 
 		// try {
 		// IRegister register =
@@ -154,6 +136,8 @@ public class ClientWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
+		// window
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 800, 600);
@@ -182,14 +166,14 @@ public class ClientWindow {
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setBounds(0, 0, 794, 178);
 		panel.add(scrollPane);
-		
-				textArea = new JTextArea();
-				scrollPane.setViewportView(textArea);
-				textArea.setMargin(new Insets(0, 5, 0, 0));
-				textArea.setWrapStyleWord(true);
-				textArea.setLineWrap(true);
-				textArea.setEditable(false);
-				DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		textArea.setMargin(new Insets(0, 5, 0, 0));
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
+		DefaultCaret caret = (DefaultCaret) textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
 		JButton btnNewButton = new JButton("Share Files");
@@ -279,8 +263,24 @@ public class ClientWindow {
 					peer.setServer_ip(serverIP);
 					peer.setServer_port(serverPort);
 
-					// btnConnect.setText("disconnect");
-					// register.register("1111", "haha.txt");
+					// start thread
+					Thread t = new Thread(new Runnable() {
+
+						public void run() {
+							while (true) {
+								try {
+									Thread.sleep(10000);
+									peer.sendSignal();
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
+						}
+					});
+
+					t.start();
 
 				} catch (ConnectException e1) {
 					JOptionPane.showMessageDialog(frame, "unable to connect to server!\nplease make sure the address is correct",
@@ -371,16 +371,15 @@ public class ClientWindow {
 		textField_downloadLimit.setColumns(10);
 		textField_downloadLimit.setBounds(38, 472, 122, 28);
 		panel.add(textField_downloadLimit);
-		
+
 		label = new JLabel("");
 		label.setBounds(25, 383, 458, 46);
 		panel.add(label);
-		
+
 		JButton btnFileList = new JButton("File List");
 		btnFileList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				
+
 			}
 		});
 		btnFileList.setBounds(236, 271, 122, 26);

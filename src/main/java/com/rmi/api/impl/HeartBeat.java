@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -35,14 +36,11 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 			String clentIp = ia.getHostAddress();
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			List<String> fileList = serverDAO.listFiles(clentIp);
-			if(fileList==null) {
-				LOGGER.info("MD5 verification fail, need peer to report!");
-				return false;
-			}
 			byte[] byteArray = fileList.toString().getBytes();
 			byte[] md_byteArray = md.digest(byteArray);
-			LOGGER.debug("peer MD5:"+MD5_array+" server MD5:"+md_byteArray);
-			if(md_byteArray == MD5_array) {
+			LOGGER.debug("server list:"+fileList.toString());
+			LOGGER.debug("peer MD5:"+Arrays.toString(MD5_array)+" server MD5:"+Arrays.toString(md_byteArray));
+			if(Arrays.equals(MD5_array, md_byteArray)) {
 				LOGGER.info("MD5 verified!");
 				return true;
 			}

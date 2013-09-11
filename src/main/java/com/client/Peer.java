@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -117,16 +118,19 @@ public class Peer {
 	
 	public boolean sendSignal() {
 		try {
-			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
-			
-			//heartBeat.signal(MD5_array)
-			
-			
-			
-			
+			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/heartBeat");
+			List<String> listFiles = peerDAO.selectAllFiles();
+			LOGGER.debug("peer list:"+listFiles.toString());
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			return heartBeat.signal(md.digest(listFiles.toString().getBytes()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return false;
+	}
+	
+	public boolean sendReport() {
 		
 		return false;
 	}

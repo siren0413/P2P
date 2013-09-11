@@ -205,14 +205,12 @@ public class ServerDAO {
 				String fileName = result.getString(1);
 				fileList.add(fileName);
 			}
-		
-			if (fileList.size() !=0 )
-				return fileList;	
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return fileList;
 	}
 	
 }

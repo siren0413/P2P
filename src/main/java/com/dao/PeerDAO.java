@@ -132,11 +132,10 @@ public class PeerDAO {
 				allFiles.add(result.getString(1));
 			}
 			
-			if(allFiles.size() != 0)
-				return allFiles;
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return allFiles;
 	}
 }
