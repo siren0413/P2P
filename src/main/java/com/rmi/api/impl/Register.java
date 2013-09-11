@@ -50,9 +50,29 @@ public class Register extends UnicastRemoteObject implements IRegister {
 		return false;
 	}
 
-	public boolean unRegister() {
-		// TODO Auto-generated method stub
+	public boolean unRegisterPeer() {
+		String clienthost;
+		try {
+			// get client IP address
+			clienthost = RemoteServer.getClientHost();
+			InetAddress ia = java.net.InetAddress.getByName(clienthost);
+			String clentIp = ia.getHostAddress();
+			LOGGER.info("Received peer unregistry request. client IP[" + clentIp + "]");
+			
+			boolean result = registerDAO.deletePeer(clienthost);
+			if(!result)
+				LOGGER.warn("Client unregistry failed!");
+			else {
+				LOGGER.info("Removed peer: ip["+clentIp+"] successfully from the index server!");
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.warn("Client unregistry failed!");
+		}
 		return false;
+
 	}
 
 	public boolean registerFile(String fileName) throws RemoteException {

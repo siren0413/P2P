@@ -49,11 +49,43 @@ public class RegisterDAO {
 		
 		return false;
 	}
+	
+	public boolean deletePeer(String clientIp) {
+		
+		 if (!deletePeerFiles(clientIp))
+			 return false;
+		
+		try {
+		    conn = ServerHSQLDB.getConnection();
+			String sql = "delete from PeerInfo where ip like '?'";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, clientIp);
+		
+			stmt.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return false;
+	}
 
-	public boolean addFile(String clientIP,String fileName) {
+	public boolean addFile(String clientIp,String fileName) {
 		try {
 			conn = ServerHSQLDB.getConnection();
-			String peer_id = getPeerID(clientIP);
+			String peer_id = getPeerID(clientIp);
 			
 			if (peer_id==null)
 				return false;
@@ -66,7 +98,6 @@ public class RegisterDAO {
 			return true;
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}finally {
 			try {
@@ -97,9 +128,42 @@ public class RegisterDAO {
 			}
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return null;
 	} 
+	
+	private boolean deletePeerFiles(String clientIP) {
+		
+		try {
+			conn = ServerHSQLDB.getConnection();
+			String peer_id = getPeerID(clientIP);
+			
+			if (peer_id==null)
+				return false;
+			String sql = "delete from FileInfo where peer_id like '?' "; 
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, peer_id);
+					
+			stmt.executeUpdate();
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return false;
+	}
 }
