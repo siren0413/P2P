@@ -88,7 +88,8 @@ public class Peer {
 				window.getProgressBar().setVisible(true);
 				//label
 				while(left>0) {
-					buffer = peerTransfer.obtain(fileName, start, BUFFER_SIZE);
+					Thread.sleep(1000);
+					buffer = peerTransfer.obtain(fileName, start, Integer.valueOf(window.getTextField_DownloadLimit().getText()));
 					out.write(buffer);
 					left -= buffer.length;
 					start += buffer.length;

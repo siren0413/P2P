@@ -69,6 +69,10 @@ public class ClientWindow {
 	private JTextField textField_serverIP;
 	private JTextField textField_serverPort;
 	private JTextField textField_downloadFileName;
+	private JTextField textField_downloadLimit;
+	private JProgressBar progressBar;
+	private JLabel label;
+	
 
 	// regular expression
 	private Pattern pattern;
@@ -87,8 +91,7 @@ public class ClientWindow {
 	// Object
 	private Peer peer;
 	Registry peerRegistry;
-	private JProgressBar progressBar;
-	private JLabel label;
+	
 
 	/**
 	 * Launch the application.
@@ -343,6 +346,12 @@ public class ClientWindow {
 		label = new JLabel("");
 		label.setBounds(29, 377, 743, 48);
 		panel.add(label);
+		
+		textField_downloadLimit = new JTextField();
+		textField_downloadLimit.setText("10");
+		textField_downloadLimit.setColumns(10);
+		textField_downloadLimit.setBounds(409, 337, 122, 28);
+		panel.add(textField_downloadLimit);
 	}
 	public JTextArea getTextArea() {
 		return textArea;
@@ -374,5 +383,9 @@ public class ClientWindow {
 	}
 	public JLabel getLabel() {
 		return label;
+	}
+	
+	public JTextField getTextField_DownloadLimit() {
+		return textField_downloadLimit;
 	}
 }
