@@ -5,8 +5,11 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import com.rmi.api.IPeerTransfer;
 import com.rmi.api.IRegister;
 import com.rmi.api.IServerTransfer;
 
@@ -17,8 +20,6 @@ public class Peer {
 	private String serverIP;
 	private String serverPort;
 	private String peer_service_port;
-	
-	
 
 	// constructor
 	public Peer(ClientWindow window) {
@@ -30,28 +31,32 @@ public class Peer {
 			IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
 			boolean result1 = register.registerFile(file.getName());
 			// add the file to self database
-			
-			if(result1)
+
+			if (result1)
 				return true;
 		} catch (Exception e) {
 			LOGGER.error("Unable to register file [" + file.getName() + "]");
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean downloadFile(String fileName) {
 		try {
-			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/serverTransfer");
-			serverTransfer.loopupFile(fileName);
-			
+			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort
+					+ "/serverTransfer");
+			List<String> peers = serverTransfer.searchFile(fileName);
+			for (String peer : peers) {
+				IPeerTransfer peerTransfer = (IPeerTransfer) Naming.lookup("rmi://" + peer + "/serverTransfer");
+				peerTransfer.obtain(fileName);
+
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 		return false;
 	}
 

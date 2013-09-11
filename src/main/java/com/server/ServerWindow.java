@@ -85,8 +85,7 @@ public class ServerWindow {
 				try {
 					
 					LocateRegistry.createRegistry(1099);
-					Register register = new Register();
-					Naming.rebind("register",register);
+					Naming.rebind("register",new Register());
 					Naming.rebind("heartBeat",new HeartBeat());
 					Naming.rebind("serverTransfer", new ServerTransfer());
 					

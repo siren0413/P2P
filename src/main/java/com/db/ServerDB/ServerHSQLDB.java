@@ -31,7 +31,8 @@ public class ServerHSQLDB {
 			
 			String createFileInfo = "CREATE TABLE       " + fileInfoTable + "  (" 
 					+" peer_id  		VARCHAR 	NOT NULL, " +  "	file_name 	VARCHAR 	NOT NULL,"    
-					+" FOREIGN KEY (peer_id) REFERENCES " + peerInfoTable + " ( id ) " + ")" ;
+					+" FOREIGN KEY (peer_id) REFERENCES " + peerInfoTable + " ( id ) ," 
+					+" constraint both_unique UNIQUE ( peer_id,file_name ) )" ;
 			
 			if(!checkTableExists(conn, peerInfoTable)) {
 				LOGGER.info("Table "+ peerInfoTable + " dose not exits.");

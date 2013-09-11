@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IServerTransfer  extends Remote{
 
-	public List<String> loopupFile(String fileName) throws RemoteException;
+	public List<String> searchFile(String fileName) throws RemoteException;
 }
