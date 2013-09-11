@@ -10,7 +10,7 @@ import javax.swing.LookAndFeel;
 import org.apache.log4j.Logger;
 
 import com.client.ClientWindow;
-import com.dao.RegisterDAO;
+import com.dao.ServerDAO;
 import com.rmi.api.IRegister;
 
 @SuppressWarnings("serial")
@@ -23,7 +23,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 	}
 
 	private Logger LOGGER = Logger.getLogger(Register.class);
-	private RegisterDAO registerDAO = new RegisterDAO();
+	private ServerDAO serverDAO = new ServerDAO();
 	
 	
 	public boolean registerPeer(String regPort) {
@@ -35,7 +35,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			String clentIp = ia.getHostAddress();
 			LOGGER.info("Received peer registry request. client IP[" + clentIp + "]");
 			
-			boolean result = registerDAO.addPeer(clentIp, regPort);
+			boolean result = serverDAO.addPeer(clentIp, regPort);
 			if(!result)
 				LOGGER.warn("Client registry failed!");
 			else {
@@ -59,7 +59,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			String clentIp = ia.getHostAddress();
 			LOGGER.info("Received peer unregistry request. client IP[" + clentIp + "]");
 			
-			boolean result = registerDAO.deletePeer(clienthost);
+			boolean result = serverDAO.deletePeer(clienthost);
 			if(!result)
 				LOGGER.warn("Client unregistry failed!");
 			else {
@@ -84,7 +84,7 @@ public class Register extends UnicastRemoteObject implements IRegister {
 			String clentIp = ia.getHostAddress();
 			LOGGER.info("Received client add file request. client IP[" + clentIp + "]");
 			
-			boolean result = registerDAO.addFile(clentIp, fileName);
+			boolean result = serverDAO.addFile(clentIp, fileName);
 			if(!result)
 				LOGGER.warn("Client add file failed !");
 			else {
