@@ -2,6 +2,7 @@ package com.rmi.api.impl;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -33,6 +34,12 @@ public class ServerTransfer extends UnicastRemoteObject implements IServerTransf
 		return clientList;
 	}
 
+	public List<String> listAllFile() throws RemoteException {
+		List<String> files = serverDAO.listAllFiles();
+		return files;
+	}
+
+	
 	
 	
 

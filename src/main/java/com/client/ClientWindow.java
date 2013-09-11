@@ -270,7 +270,9 @@ public class ClientWindow {
 							while (true) {
 								try {
 									Thread.sleep(10000);
-									peer.sendSignal();
+									if(!peer.sendSignal()) {
+										peer.sendReport();
+									}
 
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -379,7 +381,7 @@ public class ClientWindow {
 		JButton btnFileList = new JButton("File List");
 		btnFileList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				peer.listServerFile();
 			}
 		});
 		btnFileList.setBounds(236, 271, 122, 26);

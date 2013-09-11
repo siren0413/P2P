@@ -131,10 +131,35 @@ public class Peer {
 	}
 	
 	public boolean sendReport() {
+		try {
+		IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/heartBeat");
+		List<String> listFiles = peerDAO.selectAllFiles();
+		heartBeat.report(listFiles);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return false;
 	}
 	
+	public void listServerFile() {
+		try {
+			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort
+					+ "/serverTransfer");
+			List<String> files = serverTransfer.listAllFile();
+			window.getTextArea().append(SystemUtil.getSimpleTime()+"****************** Available File List *******************\n");
+			for(String file:files) {
+				window.getTextArea().append(SystemUtil.getSimpleTime()+file+"\n");
+			}
+			window.getTextArea().append(SystemUtil.getSimpleTime()+"**********************************************************\n");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 
 	// getter and setter

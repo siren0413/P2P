@@ -5,7 +5,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -25,7 +27,31 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 	}
 
 	public void report(List<String> fileList) {
-		// update database, both registry info and status
+		String clienthost;
+		try {
+			clienthost = RemoteServer.getClientHost();
+			InetAddress ia = java.net.InetAddress.getByName(clienthost);
+			String clentIp = ia.getHostAddress();
+			List<String> serverFileList = serverDAO.listFiles(clentIp);
+			HashSet<String> set = new HashSet<String>(serverFileList);
+			for(String peerFile:fileList) {
+				if(set.contains(peerFile)) {
+					set.remove(peerFile);
+				}else {
+					serverDAO.addFile(clentIp, peerFile);
+				}
+			}
+			
+			if(set.size()>0) {
+				for(String trashFile:set) {
+					serverDAO.deleteFile(clentIp, trashFile);
+				}
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean signal(byte[] MD5_array) throws RemoteException {

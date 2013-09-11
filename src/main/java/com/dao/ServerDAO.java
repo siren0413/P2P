@@ -87,12 +87,11 @@ public class ServerDAO {
 	}
 
 	public boolean addFile(String clientIp,String fileName) {
+		String peer_id = getPeerID(clientIp);
+		if (peer_id==null)
+			return false;
 		try {
 			conn = ServerHSQLDB.getConnection();
-			String peer_id = getPeerID(clientIp);
-			
-			if (peer_id==null)
-				return false;
 			String insertFile = "insert into FileInfo values (?,?)"; 
 			stmt = conn.prepareStatement(insertFile);
 			stmt.setString(1, peer_id);
@@ -156,10 +155,11 @@ public class ServerDAO {
 	
 		
 	private String getPeerID(String clientIP) {
+		Statement stmt = null;
 		try {
 			conn = ServerHSQLDB.getConnection();
 			String getHostId = "select id from PeerInfo where ip like '"+clientIP+"'";
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(getHostId);
 		
 			while(result.next()) {
@@ -219,11 +219,12 @@ public class ServerDAO {
 	}
 	
 	public List<String> searchPeerwithFile(String fileName){
+		Statement stmt = null;
 		List<String> peerList = new ArrayList<String>();
 		try {
 			conn = ServerHSQLDB.getConnection();
 			String sql = "select ip, port from PeerInfo where id = (select peer_id from FileInfo where file_name like '"+fileName+"' )";
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
 			while(result.next()) {
 				String ip = result.getString(1);
@@ -254,11 +255,32 @@ public class ServerDAO {
 	}
 	
 	public List<String> listFiles(String peer_ip){
+		Statement stmt = null;
 		List<String> fileList = new ArrayList<String>();
 		try {
 			conn = ServerHSQLDB.getConnection();
 			String sql = "select file_name from FileInfo where peer_id = (select id from PeerInfo where ip like '"+peer_ip+"' )";
-			Statement stmt = conn.createStatement();
+			stmt = conn.createStatement();
+			result = stmt.executeQuery(sql);
+			while(result.next()) {
+				String fileName = result.getString(1);
+				fileList.add(fileName);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return fileList;
+	}
+	
+	public List<String> listAllFiles(){
+		Statement stmt = null;
+		List<String> fileList = new ArrayList<String>();
+		try {
+			conn = ServerHSQLDB.getConnection();
+			String sql = "select file_name from FileInfo";
+			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
 			while(result.next()) {
 				String fileName = result.getString(1);
