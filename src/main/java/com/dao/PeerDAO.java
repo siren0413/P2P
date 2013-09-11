@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
@@ -117,5 +119,24 @@ public class PeerDAO {
 		if(findFile(fileName)!=null)
 			return true;
 		return false;
+	}
+	
+	public List<String> selectAllFiles() {
+		List<String> allFiles = new ArrayList<String>();
+		try {
+			conn = PeerHSQLDB.getConnection();
+			statement = conn.createStatement();
+			String sql = "select file_name from PeerFiles";
+			result = statement.executeQuery(sql);
+			while(result.next()) {
+				allFiles.add(result.getString(1));
+			}
+			
+			if(allFiles.size() != 0)
+				return allFiles;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
