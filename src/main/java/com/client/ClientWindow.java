@@ -55,11 +55,12 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
+import javax.swing.JProgressBar;
 
 public class ClientWindow {
 
 	private final Logger LOGGER = Logger.getLogger(ClientWindow.class);
-	
+
 	private JFrame frame;
 	private JTextArea textArea;
 	private static ClientWindow instance;
@@ -82,12 +83,12 @@ public class ClientWindow {
 
 	// status
 	private boolean connected = false;
-	
+
 	// Object
 	private Peer peer;
 	Registry peerRegistry;
-	
-	
+	private JProgressBar progressBar;
+	private JLabel label;
 
 	/**
 	 * Launch the application.
@@ -106,18 +107,17 @@ public class ClientWindow {
 
 		PeerHSQLDB.initDB();
 
-		
-//		try {
-//			IRegister register = (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
-//			register.registerPeer("1111");
+		// try {
+		// IRegister register =
+		// (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
+		// register.registerPeer("1111");
 
-////			Thread.sleep(10000);
-//			register.registerFile("haha.txt");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-	
+		// // Thread.sleep(10000);
+		// register.registerFile("haha.txt");
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 	}
 
@@ -176,25 +176,27 @@ public class ClientWindow {
 				// String aa = JOptionPane.showInputDialog(frame, "flsdjf");
 				// System.out.println(aa);
 
-				//fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				// fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				fileChooser.setMultiSelectionEnabled(true);
 				fileChooser.showOpenDialog(frame);
 				File[] files = fileChooser.getSelectedFiles();
-				for(File file:files) {
-					if(peer.shareFile(file)) {
-						textArea.append(SystemUtil.getSimpleTime()+"share file ["+file.getName()+"]\n");
-					}else {
-						textArea.append(SystemUtil.getSimpleTime()+"Unable to register file [" + file.getName() + "]\n");
+				for (File file : files) {
+					if (peer.shareFile(file)) {
+						textArea.append(SystemUtil.getSimpleTime() + "share file [" + file.getName() + "]\n");
+					} else {
+						textArea.append(SystemUtil.getSimpleTime() + "Unable to register file [" + file.getName() + "]\n");
 					}
 				}
-				
-//				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-//					// this.downloadPath =
-//					// fc.getSelectedFile().getAbsolutePath();
-//					// this.pathLabel.setText("默认路径：" + this.downloadPath);
-//					String path = fileChooser.getSelectedFile().getAbsolutePath();
-//					System.out.println(path);
-//				}
+
+				// if (fileChooser.showOpenDialog(frame) ==
+				// JFileChooser.APPROVE_OPTION) {
+				// // this.downloadPath =
+				// // fc.getSelectedFile().getAbsolutePath();
+				// // this.pathLabel.setText("默认路径：" + this.downloadPath);
+				// String path =
+				// fileChooser.getSelectedFile().getAbsolutePath();
+				// System.out.println(path);
+				// }
 
 			}
 		});
@@ -232,29 +234,29 @@ public class ClientWindow {
 
 					// register service port
 					peerRegistry = LocateRegistry.createRegistry(2055);
-					Naming.rebind("peerTransfer", new PeerTransfer());
-					
-					if(peerRegistry!=null && register.registerPeer("2055")) {
+					peerRegistry.rebind("peerTransfer", new PeerTransfer());
+
+					if (peerRegistry != null && register.registerPeer("2055")) {
 						LOGGER.info("Register service port [2055] successfully!");
-					}else {
-						textArea.append(SystemUtil.getSimpleTime()+"Unable to register service port [2055]!\n");
+					} else {
+						textArea.append(SystemUtil.getSimpleTime() + "Unable to register service port [2055]!\n");
 						LOGGER.error("Unable to register service port [2055]!");
 						return;
 					}
-						
+
 					textArea.append(SystemUtil.getSimpleTime() + "Connected to server [" + serverIP + ":" + serverPort
 							+ "] successfully!\n");
 					textField_serverIP.setEnabled(false);
 					textField_serverPort.setEnabled(false);
 					connected = true;
 					btnConnect.setEnabled(false);
-					
-					//peer
+
+					// peer
 					peer.setPeer_service_port("2055");
 					peer.setServer_ip(serverIP);
 					peer.setServer_port(serverPort);
-					
-					//btnConnect.setText("disconnect");
+
+					// btnConnect.setText("disconnect");
 					// register.register("1111", "haha.txt");
 
 				} catch (ConnectException e1) {
@@ -284,35 +286,63 @@ public class ClientWindow {
 		textField_serverPort.setBounds(245, 261, 66, 28);
 		panel.add(textField_serverPort);
 		textField_serverPort.setColumns(10);
-		
+
 		JLabel lblNewLabel = new JLabel("Server IP");
 		lblNewLabel.setBounds(19, 267, 61, 16);
 		panel.add(lblNewLabel);
-		
+
 		JLabel lblPort = new JLabel("Port");
 		lblPort.setBounds(213, 267, 61, 16);
 		panel.add(lblPort);
-		
+
 		JButton btnDownloadFiles = new JButton("Download Files");
 		btnDownloadFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String fileName = textField_downloadFileName.getText();
-				if("".equals(fileName)) {
+				if ("".equals(fileName)) {
 					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				
-				
+				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",
+						JOptionPane.ERROR_MESSAGE);
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+
+					// this.downloadPath =
+					// fc.getSelectedFile().getAbsolutePath();
+					// this.pathLabel.setText("默认路径：" + this.downloadPath);
+					String path = fileChooser.getSelectedFile().getAbsolutePath();
+					File file = new File(path + File.separator + fileName);
+					if (file.exists()) {
+						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					label.setText("Saved Path: " + path);
+					
+					boolean result = peer.downloadFile(fileName, path + File.separator + fileName);
+					
+					
+
+				}
+
 			}
 		});
 		btnDownloadFiles.setBounds(19, 339, 122, 26);
 		panel.add(btnDownloadFiles);
-		
+
 		textField_downloadFileName = new JTextField();
 		textField_downloadFileName.setColumns(10);
 		textField_downloadFileName.setBounds(152, 337, 122, 28);
 		panel.add(textField_downloadFileName);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(263, 457, 146, 20);
+		panel.add(progressBar);
+
+		label = new JLabel("");
+		label.setBounds(29, 377, 743, 48);
+		panel.add(label);
 	}
 	public JTextArea getTextArea() {
 		return textArea;
@@ -335,6 +365,14 @@ public class ClientWindow {
 	public Registry getPeerRegistry() {
 		return peerRegistry;
 	}
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
 
-	
+	public JFrame getFrame() {
+		return frame;
+	}
+	public JLabel getLabel() {
+		return label;
+	}
 }
