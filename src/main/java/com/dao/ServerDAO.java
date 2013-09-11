@@ -9,9 +9,13 @@ import java.sql.Statement;
 import javax.annotation.Generated;
 
 import com.db.ServerDB.ServerHSQLDB;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.util.ID_Generator;
 
-public class RegisterDAO {
+public class ServerDAO {
 
 	PreparedStatement stmt;
 	Connection conn;
@@ -165,5 +169,28 @@ public class RegisterDAO {
 		}
 		
 		return false;
+	}
+	
+	public List<String> searchPeerwithFile(String fileName){
+		List<String> peerList = new ArrayList<String>();
+		try {
+			conn = ServerHSQLDB.getConnection();
+			String sql = "select ip, port from PeerInfo where id = (select peer_id from FileInfo where file_name like '"+fileName+"' )";
+			Statement stmt = conn.createStatement();
+			result = stmt.executeQuery(sql);
+			while(result.next()) {
+				String ip = result.getString(1);
+				String port = result.getString(2);
+				String address = ip + ":" + port;
+				peerList.add(address);
+			}
+		
+			if (peerList.size() !=0 )
+				return peerList;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }
