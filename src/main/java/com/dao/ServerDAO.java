@@ -120,6 +120,41 @@ public class ServerDAO {
 		return false;
 	}
 	
+	public boolean deleteFile(String clientIp, String fileName) {
+		String peerId = getPeerID(clientIp);
+		if(peerId == null) {
+			return false;
+		}
+		
+		try {
+			conn = ServerHSQLDB.getConnection();
+			String sql = "delete from FileInfo where peer_id like '?' and file_name like '?'  ";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, peerId);
+			stmt.setString(2, fileName);
+			stmt.executeUpdate();
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return false;
+	} 
+	
+		
 	private String getPeerID(String clientIP) {
 		try {
 			conn = ServerHSQLDB.getConnection();
@@ -133,6 +168,18 @@ public class ServerDAO {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return null;
 	} 
@@ -189,6 +236,18 @@ public class ServerDAO {
 				return peerList;	
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return null;
