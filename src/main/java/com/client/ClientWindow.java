@@ -56,6 +56,7 @@ import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
 import javax.swing.JProgressBar;
+import javax.swing.text.DefaultCaret;
 
 public class ClientWindow {
 
@@ -72,7 +73,6 @@ public class ClientWindow {
 	private JTextField textField_downloadLimit;
 	private JProgressBar progressBar;
 	private JLabel label;
-	
 
 	// regular expression
 	private Pattern pattern;
@@ -91,7 +91,6 @@ public class ClientWindow {
 	// Object
 	private Peer peer;
 	Registry peerRegistry;
-	
 
 	/**
 	 * Launch the application.
@@ -162,15 +161,17 @@ public class ClientWindow {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(0, 0, 794, 255);
+		scrollPane.setBounds(0, 0, 804, 255);
 		panel.add(scrollPane);
 
 		textArea = new JTextArea();
-		textArea.setMargin(new Insets(0, 5, 0, 0));
 		scrollPane.setViewportView(textArea);
+		textArea.setMargin(new Insets(0, 5, 0, 0));
 		textArea.setWrapStyleWord(true);
 		textArea.setLineWrap(true);
 		textArea.setEditable(false);
+		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
 		JButton btnNewButton = new JButton("Share Files");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -301,7 +302,7 @@ public class ClientWindow {
 		JButton btnDownloadFiles = new JButton("Download Files");
 		btnDownloadFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String fileName = textField_downloadFileName.getText();
+				final String fileName = textField_downloadFileName.getText();
 				if ("".equals(fileName)) {
 					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -314,18 +315,19 @@ public class ClientWindow {
 					// this.downloadPath =
 					// fc.getSelectedFile().getAbsolutePath();
 					// this.pathLabel.setText("默认路径：" + this.downloadPath);
-					String path = fileChooser.getSelectedFile().getAbsolutePath();
+					final String path = fileChooser.getSelectedFile().getAbsolutePath();
 					File file = new File(path + File.separator + fileName);
 					if (file.exists()) {
-						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 					label.setText("Saved Path: " + path);
-					
-					boolean result = peer.downloadFile(fileName, path + File.separator + fileName);
-					
-					
+					Thread t = new Thread(new Runnable() {
+						public void run() {
+							boolean result = peer.downloadFile(fileName, path + File.separator + fileName);
+						}
+					});
+					t.start();
 
 				}
 
@@ -340,13 +342,15 @@ public class ClientWindow {
 		panel.add(textField_downloadFileName);
 
 		progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
+		progressBar.setDoubleBuffered(true);
 		progressBar.setBounds(263, 457, 146, 20);
 		panel.add(progressBar);
 
 		label = new JLabel("");
 		label.setBounds(29, 377, 743, 48);
 		panel.add(label);
-		
+
 		textField_downloadLimit = new JTextField();
 		textField_downloadLimit.setText("10");
 		textField_downloadLimit.setColumns(10);
@@ -384,7 +388,7 @@ public class ClientWindow {
 	public JLabel getLabel() {
 		return label;
 	}
-	
+
 	public JTextField getTextField_DownloadLimit() {
 		return textField_downloadLimit;
 	}

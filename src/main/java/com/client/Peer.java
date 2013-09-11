@@ -17,6 +17,7 @@ import com.dao.PeerDAO;
 import com.rmi.api.IPeerTransfer;
 import com.rmi.api.IRegister;
 import com.rmi.api.IServerTransfer;
+import com.util.SystemUtil;
 
 public class Peer {
 
@@ -86,16 +87,20 @@ public class Peer {
 				
 				window.getProgressBar().setMaximum(length);
 				window.getProgressBar().setVisible(true);
+				window.getProgressBar().setStringPainted(true);
+				
 				//label
 				while(left>0) {
 					Thread.sleep(1000);
-					buffer = peerTransfer.obtain(fileName, start, Integer.valueOf(window.getTextField_DownloadLimit().getText()));
+					buffer = peerTransfer.obtain(fileName, start, 1024*Integer.valueOf(window.getTextField_DownloadLimit().getText()));
 					out.write(buffer);
 					left -= buffer.length;
 					start += buffer.length;
 					window.getProgressBar().setValue(start);
 					window.getProgressBar().setIndeterminate(false);
+					window.getProgressBar().repaint();
 					int percent = (int)(100 * ((double) start / (double)length));
+					window.getTextArea().append(SystemUtil.getSimpleTime()+" downloading..."+percent+"%\n");
 					// label
 				}
 				out.close();
