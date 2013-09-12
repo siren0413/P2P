@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.annotation.Generated;
-
 import com.db.ServerDB.ServerHSQLDB;
 
 import java.util.ArrayList;

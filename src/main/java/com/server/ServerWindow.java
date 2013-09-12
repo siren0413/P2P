@@ -10,20 +10,14 @@ import com.rmi.api.impl.HeartBeat;
 import com.rmi.api.impl.Register;
 import com.rmi.api.impl.ServerTransfer;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.swing.JTextArea;
 
-import java.awt.Color;
 import java.awt.SystemColor;
 
 public class ServerWindow {
@@ -90,28 +84,7 @@ public class ServerWindow {
 					Naming.rebind("serverTransfer", new ServerTransfer());
 					
 					textArea.append("Index server is running...");
-					
-//					Thread.sleep(10000);
-//					Connection conn = ServerHSQLDB.getConnection();
-//					Statement stmt = conn.createStatement();
-//	//				ResultSet result = stmt.executeQuery("select * from PeerInfo");
-//					ResultSet result = stmt.executeQuery("select * from PeerInfo where ip like '192.168.1.61'");
-//					while(result.next()) {
-//						String id = result.getString(1);
-//						String ip = result.getString(2);
-//						String port = result.getString(3);
-//
-//						System.out.println("id["+id+"] ip["+ip+"] port["+port+"]");
-//					}
-//					
-//					 result = stmt.executeQuery("select * from FileInfo");
-//					while(result.next()) {
-//						String peer_id = result.getString(1);
-//						String file_name = result.getString(2);
-//					
-//						System.out.println("id["+peer_id+"] ip["+file_name+"]");
-//					}
-					
+
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

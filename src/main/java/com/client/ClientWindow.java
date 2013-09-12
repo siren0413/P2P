@@ -11,8 +11,6 @@ import javax.swing.JTextArea;
 import javax.swing.JPanel;
 
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.rmi.ConnectException;
@@ -21,36 +19,20 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.Insets;
-
 import javax.swing.JButton;
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-
 import javax.swing.JOptionPane;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JFileChooser;
 
 import com.db.PeerDB.PeerHSQLDB;
-import com.rmi.api.IHeartBeat;
 import com.rmi.api.IRegister;
 import com.rmi.api.impl.PeerTransfer;
-import com.rmi.api.impl.Register;
 import com.util.SystemUtil;
-
-import java.awt.Button;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -86,9 +68,6 @@ public class ClientWindow {
 	// default value
 	private final String default_IP = "192.168.1.125";
 	private final String default_port = "1099";
-
-	// status
-	private boolean connected = false;
 
 	// Object
 	private Peer peer;
@@ -182,10 +161,6 @@ public class ClientWindow {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// String aa = JOptionPane.showInputDialog(frame, "flsdjf");
-				// System.out.println(aa);
-
-				// fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				fileChooser.setMultiSelectionEnabled(true);
 				fileChooser.showOpenDialog(frame);
 				File[] files = fileChooser.getSelectedFiles();
@@ -197,15 +172,6 @@ public class ClientWindow {
 					}
 				}
 
-				// if (fileChooser.showOpenDialog(frame) ==
-				// JFileChooser.APPROVE_OPTION) {
-				// // this.downloadPath =
-				// // fc.getSelectedFile().getAbsolutePath();
-				// // this.pathLabel.setText("默认路径：" + this.downloadPath);
-				// String path =
-				// fileChooser.getSelectedFile().getAbsolutePath();
-				// System.out.println(path);
-				// }
 
 			}
 		});
@@ -246,9 +212,6 @@ public class ClientWindow {
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 
-					// this.downloadPath =
-					// fc.getSelectedFile().getAbsolutePath();
-					// this.pathLabel.setText("默认路径：" + this.downloadPath);
 					final String path = fileChooser.getSelectedFile().getAbsolutePath();
 					File file = new File(path + File.separator + fileName);
 					if (file.exists()) {
@@ -363,7 +326,6 @@ public class ClientWindow {
 							+ "] successfully!\n");
 					textField_serverIP.setEnabled(false);
 					textField_serverPort.setEnabled(false);
-					connected = true;
 					btnConnect.setEnabled(false);
 
 					// peer
@@ -372,7 +334,6 @@ public class ClientWindow {
 					peer.setServer_port(serverPort);
 					
 					// button enable
-					btnConnect.setEnabled(true);
 					btnNewButton.setEnabled(true);
 					btnDownloadFiles.setEnabled(true);
 					btnFileList.setEnabled(true);

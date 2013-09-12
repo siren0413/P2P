@@ -5,8 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 		}
 	}
 
-	public boolean signal(byte[] MD5_array) throws RemoteException {
+	public boolean signal(byte[] MD5_array, String peer_service_port) throws RemoteException {
 		String clienthost;
 		try {
 			clienthost = RemoteServer.getClientHost();
@@ -63,6 +63,13 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 			String clentIp = ia.getHostAddress();
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			List<String> fileList = serverDAO.listFiles(clentIp);
+			String peer_ip = serverDAO.getPeerID(clentIp);
+			if(peer_ip==null) {
+				if(!serverDAO.addPeer(clentIp, peer_service_port)) {
+					return false;
+				}
+			}
+			Collections.sort(fileList);
 			byte[] byteArray = fileList.toString().getBytes();
 			byte[] md_byteArray = md.digest(byteArray);
 			LOGGER.debug("server list:"+fileList.toString());

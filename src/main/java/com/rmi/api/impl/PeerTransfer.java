@@ -62,6 +62,8 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 	public boolean checkFileAvailable(String fileName) throws RemoteException {
 		return peerDAO.checkFileAvailable(fileName);
 	}
+
+
 	
 	
 	

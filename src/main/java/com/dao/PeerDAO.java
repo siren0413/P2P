@@ -11,8 +11,6 @@ import java.util.List;
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
 
-import org.apache.log4j.Logger;
-
 public class PeerDAO {
 	/*
 	 * To insert, delete and find file of Peer's database.

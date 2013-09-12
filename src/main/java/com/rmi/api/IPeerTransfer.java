@@ -10,6 +10,6 @@ public interface IPeerTransfer extends Remote{
 	public byte[] obtain(String fileName, int start, int length) throws RemoteException;
 	
 	public int getFileLength(String fileName) throws RemoteException;
-	
+
 	
 }
