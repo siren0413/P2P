@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.client;
 
 import java.awt.EventQueue;
@@ -42,39 +45,81 @@ import javax.swing.JProgressBar;
 import javax.swing.text.DefaultCaret;
 import java.awt.Font;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ClientWindow.
+ */
 public class ClientWindow {
 
+	/** The logger. */
 	private final Logger LOGGER = Logger.getLogger(ClientWindow.class);
 
+	/** The frame. */
 	private JFrame frame;
+	
+	/** The text area. */
 	private JTextArea textArea;
+	
+	/** The instance. */
 	private static ClientWindow instance;
+	
+	/** The option pane. */
 	private final JOptionPane optionPane = new JOptionPane();
+	
+	/** The file chooser. */
 	private final JFileChooser fileChooser = new JFileChooser();
+	
+	/** The text field_server ip. */
 	private JTextField textField_serverIP;
+	
+	/** The text field_server port. */
 	private JTextField textField_serverPort;
+	
+	/** The text field_download file name. */
 	private JTextField textField_downloadFileName;
+	
+	/** The text field_download limit. */
 	private JTextField textField_downloadLimit;
+	
+	/** The progress bar. */
 	private JProgressBar progressBar;
+	
+	/** The label. */
 	private JLabel label;
 
 	// regular expression
+	/** The pattern. */
 	private Pattern pattern;
+	
+	/** The matcher. */
 	private Matcher matcher;
+	
+	/** The ip pattern. */
 	private final String IP_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+	
+	/** The port pattern. */
 	private final String PORT_PATTERN = "^[\\d]{2,5}$";
 
 	// default value
+	/** The default_ ip. */
 	private final String default_IP = "192.168.1.125";
+	
+	/** The default_port. */
 	private final String default_port = "1099";
 
 	// Object
+	/** The peer. */
 	private Peer peer;
+	
+	/** The peer registry. */
 	Registry peerRegistry;
 
 	/**
 	 * Launch the application.
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -376,17 +421,39 @@ public class ClientWindow {
 
 		
 	}
+	
+	/**
+	 * Gets the text area.
+	 * 
+	 * @return the text area
+	 */
 	public JTextArea getTextArea() {
 		return textArea;
 	}
 
+	/**
+	 * Gets the option pane.
+	 * 
+	 * @return the option pane
+	 */
 	public JOptionPane getOptionPane() {
 		return optionPane;
 	}
+	
+	/**
+	 * Gets the file chooser.
+	 * 
+	 * @return the file chooser
+	 */
 	public JFileChooser getFileChooser() {
 		return fileChooser;
 	}
 
+	/**
+	 * Gets the single instance of ClientWindow.
+	 * 
+	 * @return single instance of ClientWindow
+	 */
 	public static ClientWindow getInstance() {
 		if (instance == null) {
 			instance = new ClientWindow();
@@ -394,20 +461,47 @@ public class ClientWindow {
 		return instance;
 	}
 
+	/**
+	 * Gets the peer registry.
+	 * 
+	 * @return the peer registry
+	 */
 	public Registry getPeerRegistry() {
 		return peerRegistry;
 	}
+	
+	/**
+	 * Gets the progress bar.
+	 * 
+	 * @return the progress bar
+	 */
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
 
+	/**
+	 * Gets the frame.
+	 * 
+	 * @return the frame
+	 */
 	public JFrame getFrame() {
 		return frame;
 	}
+	
+	/**
+	 * Gets the label.
+	 * 
+	 * @return the label
+	 */
 	public JLabel getLabel() {
 		return label;
 	}
 
+	/**
+	 * Gets the text field_ download limit.
+	 * 
+	 * @return the text field_ download limit
+	 */
 	public JTextField getTextField_DownloadLimit() {
 		return textField_downloadLimit;
 	}

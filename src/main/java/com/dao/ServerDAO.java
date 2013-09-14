@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.dao;
 
 import java.sql.Connection;
@@ -12,17 +15,31 @@ import java.util.List;
 
 import com.util.ID_Generator;
 
+/**
+ * Implements activities to index server database, such as register a peer,
+ * delete a peer, add a peer's file etc.   
+ */
 public class ServerDAO {
-	/**
-	 * Implements activities to index server database, such as register a peer,
-	 * delete a peer, add a peer's file etc.   
-	 */
+	
 
 	PreparedStatement stmt;
+	
+	/** The conn. */
 	Connection conn;
+	
+	/** The result. */
 	ResultSet result;
 	
-	// register a peer
+	 
+	/**
+	 * register a peer
+	 * 
+	 * @param ip
+	 *            the ip
+	 * @param port
+	 *            the port
+	 * @return true, if successful
+	 */
 	public boolean addPeer(String ip, String port) {
 		
 		try {
@@ -55,7 +72,13 @@ public class ServerDAO {
 		return false;
 	}
 	
-	// delete a peer
+	/**
+	 * Delete a peer.
+	 * 
+	 * @param clientIp
+	 *            the client ip
+	 * @return true, if successful
+	 */
 	public boolean deletePeer(String clientIp) {
 		
 		 if (!deletePeerFiles(clientIp))
@@ -88,7 +111,16 @@ public class ServerDAO {
 		return false;
 	}
 
-	// register a peer's file
+	 
+	/**
+	 * register a peer's file
+	 * 
+	 * @param clientIp
+	 *            the client ip
+	 * @param fileName
+	 *            the file name
+	 * @return true, if successful
+	 */
 	public boolean addFile(String clientIp,String fileName) {
 		String peer_id = getPeerID(clientIp);
 		if (peer_id==null)
@@ -122,7 +154,16 @@ public class ServerDAO {
 		return false;
 	}
 	
-	// delete a peer's file 
+	 
+	/**
+	 * delete a peer's file 
+	 * 
+	 * @param clientIp
+	 *            the client ip
+	 * @param fileName
+	 *            the file name
+	 * @return true, if successful
+	 */
 	public boolean deleteFile(String clientIp, String fileName) {
 		String peerId = getPeerID(clientIp);
 		if(peerId == null) {
@@ -157,7 +198,14 @@ public class ServerDAO {
 		return false;
 	} 
 	
-	// return a peer's id	
+		
+	/**
+	 * Gets the peer id.
+	 * 
+	 * @param clientIP
+	 *            the client ip
+	 * @return the peer id
+	 */
 	public String getPeerID(String clientIP) {
 		Statement stmt = null;
 		try {
@@ -188,7 +236,13 @@ public class ServerDAO {
 		return null;
 	} 
 	
-	// remove all the files belongs to a peer
+	/**
+	 * remove all the files belongs to a peer
+	 * 
+	 * @param clientIP
+	 *            the client ip
+	 * @return true, if successful
+	 */
 	private boolean deletePeerFiles(String clientIP) {
 		
 		try {
@@ -223,7 +277,14 @@ public class ServerDAO {
 		return false;
 	}
 	
-	// search the list of peer with a specific file 
+	 
+	/**
+	 * search the list of peer with a specific file 
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * @return the list
+	 */
 	public List<String> searchPeerwithFile(String fileName){
 		Statement stmt = null;
 		List<String> peerList = new ArrayList<String>();
@@ -260,7 +321,14 @@ public class ServerDAO {
 		return null;
 	}
 	
-	// return the list of files which a peer has registered on index server
+	 
+	/**
+	 * return the list of files which a peer has registered on index server
+	 * 
+	 * @param peer_ip
+	 *            the peer_ip
+	 * @return the list
+	 */
 	public List<String> listFiles(String peer_ip){
 		Statement stmt = null;
 		List<String> fileList = new ArrayList<String>();
@@ -281,7 +349,12 @@ public class ServerDAO {
 		return fileList;
 	}
 	
-	// get all available files from the index server
+	 
+	/**
+	 * get all available files from the index server
+	 * 
+	 * @return the list
+	 */
 	public List<String> listAllFiles(){
 		Statement stmt = null;
 		List<String> fileList = new ArrayList<String>();

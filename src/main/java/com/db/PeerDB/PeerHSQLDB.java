@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.db.PeerDB;
 
 import java.sql.Connection;
@@ -9,16 +12,21 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Database for Peer server/client
+ * There is one table in the database called 'PeerFiles'.
+ */
 public class PeerHSQLDB {
-	/*
-	 * Database for Peer server/client
-	 * There is one table in the database called 'PeerFiles'.
-	 */
+	
 
+	/** The logger. */
 	private static Logger LOGGER = Logger.getLogger(PeerHSQLDB.class);
 
-	
-	// initialize the tables in peer database. 
+	 
+	/**
+	 * initialize the tables in peer database. 
+	 */
 	public static void initDB() {
 		LOGGER.info("initializing PeerHSQLDB...");
 		try {
@@ -54,13 +62,27 @@ public class PeerHSQLDB {
 		
 	}
 	
-	// get connection to the database
+	/**
+	 * get connection to the database
+	 * 
+	 * @return the connection
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public static Connection getConnection() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:peerhsqldb/db", "SA", "");
 		return conn;
 	}
 	
-	// check whether a table is exits
+	/**
+	 * check whether a table is exits
+	 * 
+	 * @param conn
+	 *            the connection
+	 * @param tableName
+	 *            the table name
+	 * @return true, if successful
+	 */
 	public static boolean checkTableExists (Connection conn, String tableName) {
 		boolean checkTable = false;
 		

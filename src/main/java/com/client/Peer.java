@@ -1,3 +1,4 @@
+
 package com.client;
 
 import java.io.File;
@@ -23,21 +24,47 @@ import com.rmi.api.IRegister;
 import com.rmi.api.IServerTransfer;
 import com.util.SystemUtil;
 
+/**
+ * The Class Peer.
+ */
 public class Peer {
 
+	/** The logger. */
 	private final Logger LOGGER = Logger.getLogger(Peer.class);
+	
+	/** The window. */
 	private ClientWindow window;
+	
+	/** The server ip. */
 	private String serverIP;
+	
+	/** The server port. */
 	private String serverPort;
+	
+	/** The peer_service_port. */
 	private String peer_service_port;
+	
+	/** The peer dao. */
 	private PeerDAO peerDAO;
 
-	// constructor
+	/**
+	 * Instantiates a new peer.
+	 * 
+	 * @param window
+	 *            the window
+	 */
 	public Peer(ClientWindow window) {
 		this.window = window;
 		peerDAO = new PeerDAO();
 	}
 
+	/**
+	 * Share file.
+	 * 
+	 * @param file
+	 *            the file
+	 * @return true, if successful
+	 */
 	public boolean shareFile(File file) {
 		try {
 			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/register]");
@@ -68,6 +95,15 @@ public class Peer {
 		return true;
 	}
 
+	/**
+	 * Download file.
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * @param savePath
+	 *            the save path
+	 * @return true, if successful
+	 */
 	public boolean downloadFile(String fileName, String savePath) {
 		try {
 			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/serverTransfer]");
@@ -131,6 +167,11 @@ public class Peer {
 		return true;
 	}
 
+	/**
+	 * Send signal.
+	 * 
+	 * @return true, if successful
+	 */
 	public boolean sendSignal() {
 		try {
 			LOGGER.info("sending heartbeat signal to index server");
@@ -147,6 +188,11 @@ public class Peer {
 		return false;
 	}
 
+	/**
+	 * Send report.
+	 * 
+	 * @return true, if successful
+	 */
 	public boolean sendReport() {
 		try {
 			LOGGER.info("sending heartbeat report to sync with index server");
@@ -162,6 +208,9 @@ public class Peer {
 		return false;
 	}
 
+	/**
+	 * List server file.
+	 */
 	public void listServerFile() {
 		try {
 			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/serverTransfer]");
@@ -183,6 +232,9 @@ public class Peer {
 
 	}
 	
+	/**
+	 * Update local database.
+	 */
 	public void updateLocalDatabase() {
 		
 		
@@ -190,27 +242,59 @@ public class Peer {
 		
 	}
 
-	// getter and setter
+	/**
+	 * Gets the server_ip.
+	 * 
+	 * @return the server_ip
+	 */
 	public String getServer_ip() {
 		return serverIP;
 	}
 
+	/**
+	 * Sets the server_ip.
+	 * 
+	 * @param server_ip
+	 *            the new server_ip
+	 */
 	public void setServer_ip(String server_ip) {
 		this.serverIP = server_ip;
 	}
 
+	/**
+	 * Gets the server_port.
+	 * 
+	 * @return the server_port
+	 */
 	public String getServer_port() {
 		return serverPort;
 	}
 
+	/**
+	 * Sets the server_port.
+	 * 
+	 * @param server_port
+	 *            the new server_port
+	 */
 	public void setServer_port(String server_port) {
 		this.serverPort = server_port;
 	}
 
+	/**
+	 * Gets the peer_service_port.
+	 * 
+	 * @return the peer_service_port
+	 */
 	public String getPeer_service_port() {
 		return peer_service_port;
 	}
 
+	/**
+	 * Sets the peer_service_port.
+	 * 
+	 * @param peer_service_port
+	 *            the new peer_service_port
+	 */
 	public void setPeer_service_port(String peer_service_port) {
 		this.peer_service_port = peer_service_port;
 	}
