@@ -144,7 +144,7 @@ public class PeerDAO {
 	}
 	
 	// get the peer info from database
-	public List<PeerInfo> managePeerInfos () throws Exception{
+	public List<PeerInfo> managePeerInfos () throws SQLException{
 		List<PeerInfo> peerInfolist = new ArrayList<PeerInfo>();
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -159,6 +159,7 @@ public class PeerDAO {
 				pInfo.setFileSize(result.getInt(4));
 				peerInfolist.add(pInfo);
 			}
+			
 		} finally {
 			try {
 				statement.close();
