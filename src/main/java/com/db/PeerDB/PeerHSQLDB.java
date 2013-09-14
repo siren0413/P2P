@@ -17,6 +17,8 @@ public class PeerHSQLDB {
 
 	private static Logger LOGGER = Logger.getLogger(PeerHSQLDB.class);
 
+	
+	// initialize the tables in peer database. 
 	public static void initDB() {
 		LOGGER.info("initializing PeerHSQLDB...");
 		try {
@@ -51,11 +53,14 @@ public class PeerHSQLDB {
 		}
 		
 	}
+	
+	// get connection to the database
 	public static Connection getConnection() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:file:peerhsqldb/db", "SA", "");
 		return conn;
 	}
 	
+	// check whether a table is exits
 	public static boolean checkTableExists (Connection conn, String tableName) {
 		boolean checkTable = false;
 		

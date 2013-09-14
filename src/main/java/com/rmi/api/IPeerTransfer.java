@@ -4,6 +4,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface IPeerTransfer extends Remote{
+	/*
+	 * Remote method for files transfer between peers
+	 */
 	
 	public boolean checkFileAvailable(String fileName) throws RemoteException;
 

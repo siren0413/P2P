@@ -18,6 +18,7 @@ public class ServerHSQLDB {
 
 	private static Logger LOGGER = Logger.getLogger(ServerHSQLDB.class);
 
+	// initialize tables for server database 
 	public static void initDB() {
 			LOGGER.info("initializing ServerHSQLDB...");
 		try {
@@ -60,11 +61,14 @@ public class ServerHSQLDB {
 		}
 		
 	}
+	
+	// get connection to the database
 	public static Connection getConnection() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:serverhsqldb/db", "SA", "");
 		return conn;
 	}
 	
+	// check whether a table is exits
 	public static boolean checkTableExists (Connection conn, String tableName) {
 		boolean checkTable = false;
 		

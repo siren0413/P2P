@@ -13,8 +13,9 @@ import com.util.ID_Generator;
 
 public class PeerDAO {
 	/*
-	 * To insert, delete and find file of Peer's database.
-	 * Peer database has one table named 'PeerFiles'
+	 * To insert, delete and find file from Peer's database.
+	 * Peer database has one table named 'PeerFiles' to store 
+	 * the files. 
 	 */
 	
 	Connection conn;
@@ -22,7 +23,7 @@ public class PeerDAO {
 	ResultSet result;
 	Statement statement;
 	
-		
+	// insert into 'PeerFiles' table with file path,file name and file size	
 	public boolean insertFile(String filePath,String fileName,int fileSize) {
 		
 		try {
@@ -56,6 +57,7 @@ public class PeerDAO {
 		return false;
 	}
 	
+	// delete a specific file from PeerFiles table 
 	public boolean deleteFile(String fileName) {
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -84,7 +86,7 @@ public class PeerDAO {
 		return false;
 	}
 	
-	
+	// find the file path of a specific file from 'PeerFiles'
 	public String findFile(String fileName) {
 		
 		try {
@@ -113,12 +115,14 @@ public class PeerDAO {
 		return null;
 	}
 	
+	// check whether a file is in the database
 	public boolean checkFileAvailable(String fileName) {
 		if(findFile(fileName)!=null)
 			return true;
 		return false;
 	}
 	
+	// get all files in the database
 	public List<String> selectAllFiles() {
 		List<String> allFiles = new ArrayList<String>();
 		try {

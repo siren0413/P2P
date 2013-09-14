@@ -11,6 +11,9 @@ import com.rmi.api.IServerTransfer;
 
 @SuppressWarnings("serial")
 public class ServerTransfer extends UnicastRemoteObject implements IServerTransfer {
+	/*
+	 * Implementation of remote method to search available peer of given file.
+	 */
 
 	public ServerTransfer() throws RemoteException{
 		

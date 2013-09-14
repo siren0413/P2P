@@ -17,6 +17,9 @@ import com.rmi.api.IHeartBeat;
 
 @SuppressWarnings("serial")
 public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
+	/*
+	 * Test whether a peer is alive from time to time . 
+	 */
 
 	private final Logger LOGGER = Logger.getLogger(HeartBeat.class);
 	private ServerDAO serverDAO = new ServerDAO();
@@ -26,6 +29,7 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 		
 	}
 
+	// synchronize a peer's file with index server database. 
 	public void report(List<String> fileList) {
 		String clienthost;
 		try {
@@ -55,6 +59,7 @@ public class HeartBeat extends UnicastRemoteObject implements IHeartBeat {
 		}
 	}
 
+	// test whether a peer is alive or not
 	public boolean signal(byte[] MD5_array, String peer_service_port) throws RemoteException {
 		String clienthost;
 		try {
