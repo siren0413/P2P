@@ -13,7 +13,7 @@ import java.util.List;
 import com.util.ID_Generator;
 
 public class ServerDAO {
-	/*
+	/**
 	 * Implements activities to index server database, such as register a peer,
 	 * delete a peer, add a peer's file etc.
 	 */

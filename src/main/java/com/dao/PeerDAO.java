@@ -142,7 +142,9 @@ public class PeerDAO {
 	}
 	
 	// get the peer info from database
+
 	public List<PeerInfo> queryAllfromPeerInfo () throws SQLException{
+
 		List<PeerInfo> peerInfolist = new ArrayList<PeerInfo>();
 		try {
 			conn = PeerHSQLDB.getConnection();
