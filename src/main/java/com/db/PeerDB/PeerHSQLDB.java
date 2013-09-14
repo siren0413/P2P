@@ -52,7 +52,7 @@ public class PeerHSQLDB {
 		
 	}
 	public static Connection getConnection() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:hsqldb:file:peerhsqldb/db", "SA", "");
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:peerhsqldb/db", "SA", "");
 		return conn;
 	}
 	

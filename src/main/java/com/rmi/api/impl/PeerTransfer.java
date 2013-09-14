@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -17,14 +18,14 @@ import com.rmi.api.IPeerTransfer;
 @SuppressWarnings("serial")
 public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 
-	private Logger LOGGER = Logger.getLogger(PeerTransfer.class); 
+	private Logger LOGGER = Logger.getLogger(PeerTransfer.class);
 	private PeerDAO peerDAO = new PeerDAO();
 
 	public PeerTransfer() throws RemoteException {
 		super();
 	}
 
-	public byte[] obtain(String fileName, int start, int length) throws RemoteException{
+	public byte[] obtain(String fileName, int start, int length) throws RemoteException {
 		// get byte[] from other peers;
 		try {
 			String filePath = peerDAO.findFile(fileName);
@@ -33,39 +34,53 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 			byte[] buffer = new byte[length];
 			int readSize;
 			is.skip(start);
-			if((readSize = is.read(buffer,0,length))!=-1) {
-				byteArray.write(buffer,0,readSize);
+			if ((readSize = is.read(buffer, 0, length)) != -1) {
+				byteArray.write(buffer, 0, readSize);
 			}
 			is.close();
 			return byteArray.toByteArray();
-			
+
 		} catch (FileNotFoundException e) {
-			LOGGER.error("file: "+fileName+" not found",e);
+			LOGGER.error("file: " + fileName + " not found", e);
 			return null;
 		} catch (IOException e) {
-			LOGGER.error("unable to read file",e);
+			LOGGER.error("unable to read file", e);
 			return null;
-		} 
-				
+		} catch (SQLException e) {
+			LOGGER.error("DAO error", e);
+		}
+		return null;
+
 	}
 
 	public int getFileLength(String fileName) throws RemoteException {
-		String filePath = peerDAO.findFile(fileName);
-		File file = new File(filePath);
+		String filePath;
+		File file = null;
+		try {
+			filePath = peerDAO.findFile(fileName);
+			 file = new File(filePath);
+		} catch (SQLException e) {
+			LOGGER.error("DAO error", e);
+		}
 		return (int) file.length();
 	}
-	
+
 	public String getFilePath(String fileName) {
-		return peerDAO.findFile(fileName);
+		try {
+			return peerDAO.findFile(fileName);
+		} catch (SQLException e) {
+			LOGGER.error("DAO error", e);
+		}
+		return null;
 	}
 
 	public boolean checkFileAvailable(String fileName) throws RemoteException {
-		return peerDAO.checkFileAvailable(fileName);
+		try {
+			return peerDAO.checkFileAvailable(fileName);
+		} catch (SQLException e) {
+			LOGGER.error("DAO error", e);
+		}
+		return false;
 	}
-
-
-	
-	
-	
 
 }

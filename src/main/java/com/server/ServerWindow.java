@@ -39,10 +39,6 @@ public class ServerWindow {
 			}
 		});
 		
-		ServerHSQLDB.initDB();
-		//*************************************//
-		
-		
 	}
 
 	/**
@@ -50,6 +46,7 @@ public class ServerWindow {
 	 */
 	public ServerWindow() {
 		initialize();
+		ServerHSQLDB.initDB();
 	}
 
 	/**

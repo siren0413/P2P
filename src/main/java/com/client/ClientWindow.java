@@ -87,21 +87,7 @@ public class ClientWindow {
 				}
 			}
 		});
-
-		PeerHSQLDB.initDB();
-
-		// try {
-		// IRegister register =
-		// (IRegister)Naming.lookup("rmi://192.168.1.61:1099/register");
-		// register.registerPeer("1111");
-
-		// // Thread.sleep(10000);
-		// register.registerFile("haha.txt");
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
+		
 	}
 
 	/**
@@ -110,6 +96,7 @@ public class ClientWindow {
 	private ClientWindow() {
 		initialize();
 		peer = new Peer(this);
+		PeerHSQLDB.initDB();
 	}
 
 	/**
@@ -207,12 +194,11 @@ public class ClientWindow {
 					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",JOptionPane.INFORMATION_MESSAGE);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-
 					final String path = fileChooser.getSelectedFile().getAbsolutePath();
+					LOGGER.info("received user saved file path:"+path);
 					File file = new File(path + File.separator + fileName);
 					if (file.exists()) {
 						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -224,6 +210,7 @@ public class ClientWindow {
 							peer.downloadFile(fileName, path + File.separator + fileName);
 						}
 					});
+					LOGGER.info("start a new thread for downloading file.");
 					t.start();
 
 				}
@@ -308,11 +295,13 @@ public class ClientWindow {
 						return;
 					}
 
+					LOGGER.debug("invoke remote object ["+"rmi://" + serverIP + ":" + serverPort + "/register]");
 					IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
 
 					// register service port
 					peerRegistry = LocateRegistry.createRegistry(2055);
 					peerRegistry.rebind("peerTransfer", new PeerTransfer());
+					LOGGER.info("open service port 2055, bind object peerTransfer");
 
 					if (peerRegistry != null && register.registerPeer("2055")) {
 						LOGGER.info("Register service port [2055] successfully!");

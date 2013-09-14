@@ -3,8 +3,12 @@ package com.client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,6 +40,7 @@ public class Peer {
 
 	public boolean shareFile(File file) {
 		try {
+			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/register]");
 			IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
 			boolean result1 = register.registerFile(file.getName());
 			if (result1)
@@ -49,9 +54,15 @@ public class Peer {
 			else
 				return false;
 
-		} catch (Exception e) {
-			LOGGER.error("Unable to register file [" + file.getName() + "]", e);
+		} catch (SQLException e) {
+			LOGGER.error("Unable to register file [" + file.getName() + "] due to DAO error", e);
 			return false;
+		} catch (RemoteException e) {
+			LOGGER.error("Unable to register file [" + file.getName() + "] due to Remote error", e);
+		} catch (MalformedURLException e) {
+			LOGGER.error("Unable to register file [" + file.getName() + "] due to URL not correct", e);
+		} catch (NotBoundException e) {
+			LOGGER.error("Unable to register file [" + file.getName() + "] due to Not bound", e);
 		}
 
 		return true;
@@ -59,6 +70,7 @@ public class Peer {
 
 	public boolean downloadFile(String fileName, String savePath) {
 		try {
+			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/serverTransfer]");
 			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort
 					+ "/serverTransfer");
 			List<String> peers = serverTransfer.searchFile(fileName);
@@ -70,6 +82,7 @@ public class Peer {
 			}
 
 			for (String peer : peers) {
+				LOGGER.debug("invoke remote object ["+"rmi://" + peer + "/peerTransfer]");
 				IPeerTransfer peerTransfer = (IPeerTransfer) Naming.lookup("rmi://" + peer + "/peerTransfer");
 				LOGGER.info("start downloading file from:" + "rmi://" + peer + "/peerTransfer");
 				if (!peerTransfer.checkFileAvailable(fileName)) {
@@ -80,7 +93,7 @@ public class Peer {
 				int start = 0;
 				int left = length;
 
-				LOGGER.debug("file length [" + length + "]");
+				LOGGER.info("file size:" + length + " bytes");
 
 				File file = new File(savePath);
 				OutputStream out = new FileOutputStream(file);
@@ -89,6 +102,8 @@ public class Peer {
 				window.getProgressBar().setMaximum(length);
 				window.getProgressBar().setVisible(true);
 				window.getProgressBar().setStringPainted(true);
+
+				LOGGER.info("download speed:" + Integer.valueOf(window.getTextField_DownloadLimit().getText()) * 1024 + " KB/S");
 
 				window.getTextArea().append(SystemUtil.getSimpleTime() + "Start downloading...\n");
 				while (left > 0) {
@@ -108,7 +123,7 @@ public class Peer {
 			LOGGER.info("download file successfully!");
 			window.getTextArea().append(SystemUtil.getSimpleTime() + "Download complete!\n");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("fail to download file [" + fileName + "] ", e);
 			JOptionPane.showMessageDialog(window.getFrame(), e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -118,10 +133,11 @@ public class Peer {
 
 	public boolean sendSignal() {
 		try {
+			LOGGER.info("sending heartbeat signal to index server");
+			LOGGER.debug("invoke remote object ["+"rmi://" + serverIP + ":" + serverPort + "/heartBeat]");
 			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/heartBeat");
 			List<String> listFiles = peerDAO.selectAllFiles();
 			Collections.sort(listFiles);
-			LOGGER.debug("peer list:" + listFiles.toString());
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			return heartBeat.signal(md.digest(listFiles.toString().getBytes()), peer_service_port);
 		} catch (Exception e) {
@@ -133,12 +149,14 @@ public class Peer {
 
 	public boolean sendReport() {
 		try {
+			LOGGER.info("sending heartbeat report to sync with index server");
+			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/heartBeat]");
 			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/heartBeat");
 			List<String> listFiles = peerDAO.selectAllFiles();
 			heartBeat.report(listFiles);
-
+			LOGGER.info("sent report successfully.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("fail to send report", e);
 		}
 
 		return false;
@@ -146,9 +164,11 @@ public class Peer {
 
 	public void listServerFile() {
 		try {
+			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/serverTransfer]");
 			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort
 					+ "/serverTransfer");
 			List<String> files = serverTransfer.listAllFile();
+			LOGGER.debug("got file list from index server.");
 			window.getTextArea().append(
 					SystemUtil.getSimpleTime() + "****************** Available File List *******************\n");
 			for (String file : files) {
@@ -158,7 +178,7 @@ public class Peer {
 					SystemUtil.getSimpleTime() + "**********************************************************\n");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("fail to receive file list from server", e);
 		}
 
 	}

@@ -23,7 +23,7 @@ public class PeerDAO {
 	Statement statement;
 	
 		
-	public boolean insertFile(String filePath,String fileName,int fileSize) {
+	public boolean insertFile(String filePath,String fileName,int fileSize) throws SQLException {
 		
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -34,13 +34,11 @@ public class PeerDAO {
 			stmt.setString(2, filePath);
 			stmt.setString(3, fileName);
 			stmt.setInt(4, fileSize);
-		
 			stmt.executeUpdate();
 			
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
+		} 
+		finally {
 			try {
 				stmt.close();
 			} catch (SQLException e) {
@@ -53,10 +51,9 @@ public class PeerDAO {
 				}
 			}
 		}
-		return false;
 	}
 	
-	public boolean deleteFile(String fileName) {
+	public boolean deleteFile(String fileName) throws SQLException {
 		try {
 			conn = PeerHSQLDB.getConnection();
 			String sql = "delete from PeerFiles where file_name like '?' ";
@@ -66,9 +63,7 @@ public class PeerDAO {
 			stmt.executeUpdate();
 			
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e) {
@@ -81,11 +76,10 @@ public class PeerDAO {
 				}
 			}
 		}
-		return false;
 	}
 	
 	
-	public String findFile(String fileName) {
+	public String findFile(String fileName) throws SQLException {
 		
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -95,9 +89,7 @@ public class PeerDAO {
 			while(result.next()) {
 				return result.getString(1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				statement.close();
 			} catch (SQLException e) {
@@ -113,13 +105,13 @@ public class PeerDAO {
 		return null;
 	}
 	
-	public boolean checkFileAvailable(String fileName) {
+	public boolean checkFileAvailable(String fileName) throws SQLException {
 		if(findFile(fileName)!=null)
 			return true;
 		return false;
 	}
 	
-	public List<String> selectAllFiles() {
+	public List<String> selectAllFiles() throws SQLException {
 		List<String> allFiles = new ArrayList<String>();
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -129,10 +121,18 @@ public class PeerDAO {
 			while(result.next()) {
 				allFiles.add(result.getString(1));
 			}
-			
-		
-		} catch (Exception e) {
-			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return allFiles;
 	}
