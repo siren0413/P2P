@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.server;
 
 import java.awt.EventQueue;
@@ -20,12 +23,20 @@ import javax.swing.JTextArea;
 
 import java.awt.SystemColor;
 
+// TODO: Auto-generated Javadoc
+/**
+ * ServerWindow to start the server.
+ */
 public class ServerWindow {
 
+	/** The frame. */
 	private JFrame frame;
 
 	/**
 	 * Launch the application.
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

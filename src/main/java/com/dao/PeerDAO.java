@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.dao;
 
 import java.sql.Connection;
@@ -12,18 +15,39 @@ import com.cache.PeerInfo;
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
 
+/**
+ * To insert, delete and find file from Peer's database. Peer database has
+ * one table named 'PeerFiles' to store the files.
+ */
 public class PeerDAO {
-	/*
-	 * To insert, delete and find file from Peer's database. Peer database has
-	 * one table named 'PeerFiles' to store the files.
-	 */
+	
 
+	/** The conn. */
 	Connection conn;
+	
+	/** The stmt. */
 	PreparedStatement stmt;
+	
+	/** The result. */
 	ResultSet result;
+	
+	/** The statement. */
 	Statement statement;
 
-	// insert into 'PeerFiles' table with file path,file name and file size
+	
+	/**
+	 * insert into 'PeerFiles' table with file path,file name and file size
+	 * 
+	 * @param filePath
+	 *            the file path
+	 * @param fileName
+	 *            the file name
+	 * @param fileSize
+	 *            the file size
+	 * @return true, if successful
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public boolean insertFile(String filePath, String fileName, int fileSize) throws SQLException {
 
 		try {
@@ -53,7 +77,15 @@ public class PeerDAO {
 		}
 	}
 
-	// delete a specific file from PeerFiles table
+	 
+	/**
+	 * delete a specific file from PeerFiles table
+	 * @param fileName
+	 *            the file name
+	 * @return true, if successful
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public boolean deleteFile(String fileName) throws SQLException {
 
 		try {
@@ -78,7 +110,16 @@ public class PeerDAO {
 		}
 	}
 
-	// find the file path of a specific file from 'PeerFiles'
+	 
+	/**
+	 * find the file path of a specific file from 'PeerFiles'
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * @return the string
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public String findFile(String fileName) throws SQLException {
 
 		try {
@@ -105,7 +146,16 @@ public class PeerDAO {
 		return null;
 	}
 
-	// check whether a file is in the database
+	
+	/**
+	 *  check whether a file is in the database
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * @return true, if successful
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public boolean checkFileAvailable(String fileName) throws SQLException {
 
 		if (findFile(fileName) != null)
@@ -113,7 +163,14 @@ public class PeerDAO {
 		return false;
 	}
 
-	// get all files in the database
+	 
+	/**
+	 * get all files in the database
+	 * 
+	 * @return the list
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public List<String> selectAllFiles() throws SQLException {
 
 		List<String> allFiles = new ArrayList<String>();
@@ -141,10 +198,15 @@ public class PeerDAO {
 		return allFiles;
 	}
 	
-	// get the peer info from database
-
+	 
+	/**
+	 * get the peer info from database
+	 * 
+	 * @return the list
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public List<PeerInfo> queryAllfromPeerInfo () throws SQLException{
-
 		List<PeerInfo> peerInfolist = new ArrayList<PeerInfo>();
 		try {
 			conn = PeerHSQLDB.getConnection();

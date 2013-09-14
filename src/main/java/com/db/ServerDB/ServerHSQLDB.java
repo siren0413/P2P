@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.db.ServerDB;
 
 import java.sql.Connection;
@@ -9,16 +12,19 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
+/**
+ *  Database for index server
+ * There are two tables in there: 'PeerInfo' to save peer registry information 
+ * and 'FileInfo' for peer files management.
+ */
 public class ServerHSQLDB {
 
-	/* Database for index server
-	 * There are two tables in there: 'PeerInfo' to save peer registry information 
-	 * and 'FileInfo' for peer files management.
-	 */
-
+	/** The logger. */
 	private static Logger LOGGER = Logger.getLogger(ServerHSQLDB.class);
 
-	// initialize tables for server database 
+	/**
+	 * initialize tables for server database 
+	 */
 	public static void initDB() {
 			LOGGER.info("initializing ServerHSQLDB...");
 		try {
@@ -62,13 +68,28 @@ public class ServerHSQLDB {
 		
 	}
 	
-	// get connection to the database
+	 
+	/**
+	 * get connection to the database
+	 * 
+	 * @return the connection
+	 * @throws SQLException
+	 *             the sQL exception
+	 */
 	public static Connection getConnection() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:serverhsqldb/db", "SA", "");
 		return conn;
 	}
 	
-	// check whether a table is exits
+	/**
+	 * check whether a table is exits
+	 * 
+	 * @param conn
+	 *            the connection
+	 * @param tableName
+	 *            the table name
+	 * @return true, if successful
+	 */
 	public static boolean checkTableExists (Connection conn, String tableName) {
 		boolean checkTable = false;
 		
