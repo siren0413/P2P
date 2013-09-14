@@ -90,11 +90,9 @@ public class PeerDAO {
 
 		try {
 			conn = PeerHSQLDB.getConnection();
-			String sql = "delete from PeerFiles where file_name like '?' ";
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, fileName);
-
-			stmt.executeUpdate();
+			statement = conn.createStatement();
+			String sql = "delete from PeerFiles where file_name like '" + fileName + "'";
+			statement.executeUpdate(sql);
 
 			return true;
 		} finally {
@@ -208,7 +206,7 @@ public class PeerDAO {
 	 * @throws SQLException
 	 *             the sQL exception
 	 */
-	public List<PeerInfo> managePeerInfos () throws SQLException{
+	public List<PeerInfo> queryAllfromPeerInfo () throws SQLException{
 		List<PeerInfo> peerInfolist = new ArrayList<PeerInfo>();
 		try {
 			conn = PeerHSQLDB.getConnection();
@@ -223,7 +221,7 @@ public class PeerDAO {
 				pInfo.setFileSize(result.getInt(4));
 				peerInfolist.add(pInfo);
 			}
-			
+
 		} finally {
 			try {
 				statement.close();
@@ -237,6 +235,6 @@ public class PeerDAO {
 				}
 			}
 		}
-		return null;
+		return peerInfolist;
 	}
 }

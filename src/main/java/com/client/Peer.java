@@ -2,7 +2,9 @@
 package com.client;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -17,6 +19,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
+import com.cache.PeerInfo;
 import com.dao.PeerDAO;
 import com.rmi.api.IHeartBeat;
 import com.rmi.api.IPeerTransfer;
@@ -116,23 +119,47 @@ public class Peer {
 						JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
+			boolean result = false;
 
 			for (String peer : peers) {
-				LOGGER.debug("invoke remote object ["+"rmi://" + peer + "/peerTransfer]");
-				IPeerTransfer peerTransfer = (IPeerTransfer) Naming.lookup("rmi://" + peer + "/peerTransfer");
+				LOGGER.debug("invoke remote object [" + "rmi://" + peer + "/peerTransfer]");
+				IPeerTransfer peerTransfer;
+				try {
+					peerTransfer = (IPeerTransfer) Naming.lookup("rmi://" + peer + "/peerTransfer");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+					continue;
+				}
 				LOGGER.info("start downloading file from:" + "rmi://" + peer + "/peerTransfer");
-				if (!peerTransfer.checkFileAvailable(fileName)) {
+				try {
+					if (!peerTransfer.checkFileAvailable(fileName)) {
+						continue;
+					}
+				} catch (RemoteException e2) {
+					e2.printStackTrace();
 					continue;
 				}
 
-				int length = peerTransfer.getFileLength(fileName);
+				int length = 0;
+				try {
+					length = peerTransfer.getFileLength(fileName);
+				} catch (RemoteException e2) {
+					e2.printStackTrace();
+					continue;
+				}
 				int start = 0;
 				int left = length;
 
 				LOGGER.info("file size:" + length + " bytes");
 
 				File file = new File(savePath);
-				OutputStream out = new FileOutputStream(file);
+				OutputStream out;
+				try {
+					out = new FileOutputStream(file);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+					continue;
+				}
 				byte[] buffer;
 
 				window.getProgressBar().setMaximum(length);
@@ -143,21 +170,37 @@ public class Peer {
 
 				window.getTextArea().append(SystemUtil.getSimpleTime() + "Start downloading...\n");
 				while (left > 0) {
-					Thread.sleep(1000);
-					buffer = peerTransfer.obtain(fileName, start,
-							1024 * Integer.valueOf(window.getTextField_DownloadLimit().getText()));
-					out.write(buffer);
-					left -= buffer.length;
-					start += buffer.length;
-					window.getProgressBar().setValue(start);
-					window.getProgressBar().setIndeterminate(false);
-					window.getProgressBar().repaint();
-				}
-				out.close();
+					try {
+						Thread.sleep(1000);
 
+						buffer = peerTransfer.obtain(fileName, start,
+								1024 * Integer.valueOf(window.getTextField_DownloadLimit().getText()));
+
+						out.write(buffer);
+						left -= buffer.length;
+						start += buffer.length;
+						window.getProgressBar().setValue(start);
+						window.getProgressBar().setIndeterminate(false);
+						window.getProgressBar().repaint();
+					} catch (Exception e) {
+						e.printStackTrace();
+						continue;
+					}
+				}
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				result = true;
 			}
-			LOGGER.info("download file successfully!");
-			window.getTextArea().append(SystemUtil.getSimpleTime() + "Download complete!\n");
+			if(result) {
+				LOGGER.info("download file successfully!");
+				window.getTextArea().append(SystemUtil.getSimpleTime() + "Download complete!\n");
+			}else {
+				LOGGER.info("fail to download.");
+				window.getTextArea().append(SystemUtil.getSimpleTime() + "Download abort!\n");
+			}
 		} catch (Exception e) {
 			LOGGER.error("fail to download file [" + fileName + "] ", e);
 			JOptionPane.showMessageDialog(window.getFrame(), e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -175,17 +218,21 @@ public class Peer {
 	public boolean sendSignal() {
 		try {
 			LOGGER.info("sending heartbeat signal to index server");
-			LOGGER.debug("invoke remote object ["+"rmi://" + serverIP + ":" + serverPort + "/heartBeat]");
+			LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/heartBeat]");
 			IHeartBeat heartBeat = (IHeartBeat) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/heartBeat");
 			List<String> listFiles = peerDAO.selectAllFiles();
 			Collections.sort(listFiles);
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			return heartBeat.signal(md.digest(listFiles.toString().getBytes()), peer_service_port);
+			if (!heartBeat.signal(md.digest(listFiles.toString().getBytes()), peer_service_port)) {
+				LOGGER.info("peer data is not consistent with server data, request sync.");
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return false;
+		LOGGER.info("peer data is consistent with server data.");
+		return true;
 	}
 
 	/**
@@ -231,15 +278,28 @@ public class Peer {
 		}
 
 	}
+
 	
 	/**
 	 * Update local database.
 	 */
+
 	public void updateLocalDatabase() {
-		
-		
-		
-		
+		LOGGER.info("update local database");
+		try {
+			List<PeerInfo> list = peerDAO.queryAllfromPeerInfo();
+			for (PeerInfo info : list) {
+				File file = new File(info.getFilePath());
+				if (!file.exists()) {
+					LOGGER.info("file not found [" + file.getAbsolutePath() + "]");
+					peerDAO.deleteFile(info.getFileName());
+					LOGGER.info("delete file [" + file.getName() + "] from database.");
+				}
+			}
+
+		} catch (SQLException e) {
+			LOGGER.error("DAO error", e);
+		}
 	}
 
 	/**

@@ -396,6 +396,23 @@ public class ClientWindow {
 					});
 
 					t.start();
+					
+					Thread t1 = new Thread(new Runnable() {
+
+						public void run() {
+							while (true) {
+								try {
+									peer.updateLocalDatabase();
+									Thread.sleep(10000);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
+						}
+					});
+
+					t1.start();
 
 				} catch (ConnectException e1) {
 					JOptionPane.showMessageDialog(frame, "unable to connect to server!\nplease make sure the address is correct",
