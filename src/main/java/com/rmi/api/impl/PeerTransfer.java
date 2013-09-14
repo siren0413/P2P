@@ -17,6 +17,9 @@ import com.rmi.api.IPeerTransfer;
 
 @SuppressWarnings("serial")
 public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
+	/*
+	 * File transfer between peers
+	 */
 
 	private Logger LOGGER = Logger.getLogger(PeerTransfer.class);
 	private PeerDAO peerDAO = new PeerDAO();
@@ -25,7 +28,9 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 		super();
 	}
 
+	// download a file from a peer
 	public byte[] obtain(String fileName, int start, int length) throws RemoteException {
+
 		// get byte[] from other peers;
 		try {
 			String filePath = peerDAO.findFile(fileName);
@@ -58,7 +63,7 @@ public class PeerTransfer extends UnicastRemoteObject implements IPeerTransfer {
 		File file = null;
 		try {
 			filePath = peerDAO.findFile(fileName);
-			 file = new File(filePath);
+			file = new File(filePath);
 		} catch (SQLException e) {
 			LOGGER.error("DAO error", e);
 		}

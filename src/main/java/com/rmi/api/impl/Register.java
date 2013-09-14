@@ -10,6 +10,10 @@ import com.rmi.api.IRegister;
 
 @SuppressWarnings("serial")
 public class Register extends UnicastRemoteObject implements IRegister {
+	/*
+	 * Implementation of remote method to register a peer, unregister a peer 
+	 * and register a peer's file
+	 */
 
 	public Register() throws RemoteException {
 		super();
