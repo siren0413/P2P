@@ -182,6 +182,13 @@ public class Peer {
 		}
 
 	}
+	
+	public void updateLocalDatabase() {
+		
+		
+		
+		
+	}
 
 	// getter and setter
 	public String getServer_ip() {
