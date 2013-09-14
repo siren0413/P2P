@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cache.PeerInfo;
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
 
@@ -140,5 +141,37 @@ public class PeerDAO {
 			}
 		}
 		return allFiles;
+	}
+	
+	// get the peer info from database
+	public List<PeerInfo> managePeerInfos () throws Exception{
+		List<PeerInfo> peerInfolist = new ArrayList<PeerInfo>();
+		try {
+			conn = PeerHSQLDB.getConnection();
+			statement = conn.createStatement();
+			String sql = "select * from PeerFiles";
+			result = statement.executeQuery(sql);
+			while (result.next()) {
+				PeerInfo pInfo = new PeerInfo();
+				pInfo.setId(result.getString(1));
+				pInfo.setFilePath(result.getString(2));
+				pInfo.setFileName(result.getString(3));
+				pInfo.setFileSize(result.getInt(4));
+				peerInfolist.add(pInfo);
+			}
+		} finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 }

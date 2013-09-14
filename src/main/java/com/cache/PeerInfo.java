@@ -5,7 +5,7 @@ public class PeerInfo {
 	private String id;
 	private String fileName;
 	private String filePath;
-	private String fileSize;
+	private int fileSize;
 	
 	
 	public String getId() {
@@ -26,11 +26,11 @@ public class PeerInfo {
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-	public String getFileSize() {
+	public int getFileSize() {
 		return fileSize;
 	}
-	public void setFileSize(String fileSize) {
-		this.fileSize = fileSize;
+	public int setFileSize(int fileSize) {
+		return this.fileSize = fileSize;
 	}
 
 }
