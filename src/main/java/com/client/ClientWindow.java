@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 package com.client;
 
 import java.awt.EventQueue;
@@ -47,7 +45,7 @@ import java.awt.Font;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ClientWindow.
+ * The GUI for peer
  */
 public class ClientWindow {
 

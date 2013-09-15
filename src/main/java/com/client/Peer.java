@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
+import com.cache.PeerInfo;
 import com.dao.PeerDAO;
 import com.rmi.api.IHeartBeat;
 import com.rmi.api.IPeerTransfer;
