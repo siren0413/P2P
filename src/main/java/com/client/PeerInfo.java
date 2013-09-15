@@ -1,7 +1,7 @@
 /*
  * 
  */
-package com.cache;
+package com.client;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cache.PeerInfo;
+import com.client.PeerInfo;
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
 
