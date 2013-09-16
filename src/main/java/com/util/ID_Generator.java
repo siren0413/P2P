@@ -1,6 +1,17 @@
-/*
+/**
+ * NAME: 
+ * 		ID_Generator.java
  * 
+ * PURPOSE: 
+ * 		To generate a unique ID.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.util;
 
 import java.util.UUID;

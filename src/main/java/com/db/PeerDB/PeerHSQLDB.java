@@ -1,6 +1,18 @@
-/*
+/**
+ * NAME: 
+ * 		PeerHSQLDB.java
  * 
+ * PURPOSE: 
+ * 		Database for Peer server/client.
+ * 		There is one table in the database called 'PeerFiles'.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.db.PeerDB;
 
 import java.sql.Connection;
@@ -12,13 +24,12 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-// TODO: Auto-generated Javadoc
-/**
- * Database for Peer server/client
- * There is one table in the database called 'PeerFiles'.
- */
 public class PeerHSQLDB {
-	
+
+	/*
+	 * Database for Peer server/client
+	 * There is one table in the database called 'PeerFiles'.
+	 */
 
 	/** The logger. */
 	private static Logger LOGGER = Logger.getLogger(PeerHSQLDB.class);

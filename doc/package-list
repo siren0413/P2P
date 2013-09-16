@@ -1,9 +1,1 @@
-com.cache
-com.client
-com.dao
 com.db.PeerDB
-com.db.ServerDB
-com.rmi.api
-com.rmi.api.impl
-com.server
-com.util

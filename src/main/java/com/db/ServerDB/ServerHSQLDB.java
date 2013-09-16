@@ -1,6 +1,19 @@
-/*
+/**
+ * NAME: 
+ * 		ServerHSQLDB.java
  * 
+ * PURPOSE: 
+ * 		Database for index server
+ *      There are two tables in there: 'PeerInfo' to save peer registry information 
+ *      and 'FileInfo' for peer files management.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.db.ServerDB;
 
 import java.sql.Connection;
@@ -12,12 +25,12 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-/**
- *  Database for index server
- * There are two tables in there: 'PeerInfo' to save peer registry information 
- * and 'FileInfo' for peer files management.
- */
 public class ServerHSQLDB {
+	/**
+	 * Database for index server
+	 * There are two tables in there: 'PeerInfo' to save peer registry information 
+	 * and 'FileInfo' for peer files management.
+	 */
 
 	/** The logger. */
 	private static Logger LOGGER = Logger.getLogger(ServerHSQLDB.class);

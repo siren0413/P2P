@@ -1,3 +1,4 @@
+
 /**
  * NAME: 
  * 		ClientWindow.java
@@ -16,6 +17,7 @@
  * 		implement the event handler of some action such as button clicked.
  * 
  */
+
 package com.client;
 
 import java.awt.EventQueue;
@@ -62,7 +64,7 @@ import java.awt.Font;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ClientWindow.
+ * The GUI for peer
  */
 public class ClientWindow {
 

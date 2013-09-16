@@ -1,6 +1,18 @@
-/*
+/**
+ * NAME: 
+ * 		PeerDAO.java
  * 
+ * PURPOSE: 
+ * 		To insert, delete and find file from Peer's database. Peer database has
+ * 		one table named 'PeerFiles' to store the files.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.dao;
 
 import java.sql.Connection;

@@ -1,6 +1,17 @@
-/*
+/**
+ * NAME: 
+ * 		PropertyUtil.java
  * 
+ * PURPOSE: 
+ * 		The property utility class for peer file transfer.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.util;
 
 import java.io.FileNotFoundException;
@@ -8,10 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class PropertyUtil.
- */
+
 public class PropertyUtil {
 
 	/** The prop. */

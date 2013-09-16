@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 /**
- * A remote method to test whether a peer is alive by send out a 
+ * Remote method to test whether a peer is alive by send out a 
  * signal.   
  */
 public interface IHeartBeat extends Remote {
