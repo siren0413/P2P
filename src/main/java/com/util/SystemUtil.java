@@ -1,15 +1,22 @@
-/*
- * System utility class to get system time
+/**
+ * NAME: 
+ * 		PeerDAO.java
+ * 
+ * PURPOSE: 
+ * 		System utility class to get system time
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
+
 package com.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class SystemUtil.
- */
 public class SystemUtil {
 
 	/** The Constant date. */
