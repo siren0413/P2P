@@ -62,10 +62,7 @@ import javax.swing.JProgressBar;
 import javax.swing.text.DefaultCaret;
 import java.awt.Font;
 
-// TODO: Auto-generated Javadoc
-/**
- * The GUI for peer
- */
+
 public class ClientWindow {
 
 	/** The logger. */

@@ -12,7 +12,6 @@
  * PROJECT: 
  * 		P2P File sharing system
  */
-
 package com.dao;
 
 import java.sql.Connection;
@@ -27,11 +26,12 @@ import com.cache.PeerInfo;
 import com.db.PeerDB.PeerHSQLDB;
 import com.util.ID_Generator;
 
-/**
- * To insert, delete and find file from Peer's database. Peer database has
- * one table named 'PeerFiles' to store the files.
- */
 public class PeerDAO {
+
+	/**
+	 * To insert, delete and find file from Peer's database. Peer database has
+	 * one table named 'PeerFiles' to store the files.
+	 */
 	
 
 	/** The conn. */

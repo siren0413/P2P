@@ -19,10 +19,6 @@
 
 package com.cache;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class PeerInfo.
- */
 public class PeerInfo {
 	
 	/** The bean class for peer information. */
