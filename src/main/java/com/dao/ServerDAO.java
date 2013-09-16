@@ -1,6 +1,16 @@
-/*
- * Implements activities to index server database, such as register a peer,
- * delete a peer, add a peer's file etc. 
+/**
+ * NAME: 
+ * 		ServerDAO.java
+ * 
+ * PURPOSE: 
+ * 		Implements activities to index server database, such as register a peer,
+ * 		delete a peer, add a peer's file etc.   
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
  */
 package com.dao;
 
@@ -16,12 +26,12 @@ import java.util.List;
 
 import com.util.ID_Generator;
 
-/**
- * Implements activities to index server database, such as register a peer,
- * delete a peer, add a peer's file etc.   
- */
 public class ServerDAO {
 
+	/**
+	 * Implements activities to index server database, such as register a peer,
+	 * delete a peer, add a peer's file etc.   
+	 */
 
 	/** The stmt. */
 	PreparedStatement stmt;
