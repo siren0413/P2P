@@ -1,5 +1,5 @@
 /*
- * 
+ * Property utility class for peer file transfer
  */
 package com.util;
 
@@ -10,7 +10,7 @@ import java.util.Properties;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class PropertyUtil.
+ * PropertyUtil.
  */
 public class PropertyUtil {
 

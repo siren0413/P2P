@@ -1,5 +1,5 @@
 /*
- * 
+ * System utility class to get system time
  */
 package com.util;
 

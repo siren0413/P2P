@@ -1,5 +1,6 @@
 /*
- * 
+ * Implements activities to index server database, such as register a peer,
+ * delete a peer, add a peer's file etc. 
  */
 package com.dao;
 

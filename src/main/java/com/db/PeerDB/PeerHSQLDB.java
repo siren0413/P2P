@@ -1,5 +1,6 @@
 /*
- * 
+ * Database for Peer server/client
+ * There is one table in the database called 'PeerFiles'.
  */
 package com.db.PeerDB;
 

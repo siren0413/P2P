@@ -1,5 +1,7 @@
 /*
- * 
+ * Database for index server
+ * There are two tables in there: 'PeerInfo' to save peer registry information 
+ * and 'FileInfo' for peer files management.
  */
 package com.db.ServerDB;
 
@@ -13,7 +15,7 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 
 /**
- *  Database for index server
+ * Database for index server
  * There are two tables in there: 'PeerInfo' to save peer registry information 
  * and 'FileInfo' for peer files management.
  */

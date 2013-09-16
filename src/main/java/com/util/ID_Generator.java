@@ -1,5 +1,5 @@
 /*
- * 
+ * To generate a unique id 
  */
 package com.util;
 
