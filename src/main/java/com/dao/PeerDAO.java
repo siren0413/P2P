@@ -1,5 +1,6 @@
-/*
- * 
+/* 
+ * To insert, delete and find file from Peer's database. Peer database has
+ * one table named 'PeerFiles' to store the files.
  */
 package com.dao;
 
