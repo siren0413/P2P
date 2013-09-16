@@ -1,4 +1,19 @@
-/*
+/**
+ * NAME: 
+ * 		ClientWindow.java
+ * 
+ * PURPOSE: 
+ * 		Open a GUI window for interacting with users
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		initialize java swing frame and all the components in the frame.
+ * 		implement the event handler of some action such as button clicked.
  * 
  */
 package com.client;
@@ -56,62 +71,62 @@ public class ClientWindow {
 
 	/** The frame. */
 	private JFrame frame;
-	
+
 	/** The text area. */
 	private JTextArea textArea;
-	
+
 	/** The instance. */
 	private static ClientWindow instance;
-	
+
 	/** The option pane. */
 	private final JOptionPane optionPane = new JOptionPane();
-	
+
 	/** The file chooser. */
 	private final JFileChooser fileChooser = new JFileChooser();
-	
+
 	/** The text field_server ip. */
 	private JTextField textField_serverIP;
-	
+
 	/** The text field_server port. */
 	private JTextField textField_serverPort;
-	
+
 	/** The text field_download file name. */
 	private JTextField textField_downloadFileName;
-	
+
 	/** The text field_download limit. */
 	private JTextField textField_downloadLimit;
-	
+
 	/** The progress bar. */
 	private JProgressBar progressBar;
-	
+
 	/** The label. */
 	private JLabel label;
 
 	// regular expression
 	/** The pattern. */
 	private Pattern pattern;
-	
+
 	/** The matcher. */
 	private Matcher matcher;
-	
+
 	/** The ip pattern. */
 	private final String IP_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-	
+
 	/** The port pattern. */
 	private final String PORT_PATTERN = "^[\\d]{2,5}$";
 
 	// default value
 	/** The default_ ip. */
 	private final String default_IP = "192.168.1.125";
-	
+
 	/** The default_port. */
 	private final String default_port = "1099";
 
 	// Object
 	/** The peer. */
 	private Peer peer;
-	
+
 	/** The peer registry. */
 	Registry peerRegistry;
 
@@ -132,7 +147,7 @@ public class ClientWindow {
 				}
 			}
 		});
-		
+
 	}
 
 	/**
@@ -204,7 +219,6 @@ public class ClientWindow {
 					}
 				}
 
-
 			}
 		});
 		btnNewButton.setBounds(19, 266, 122, 26);
@@ -215,7 +229,7 @@ public class ClientWindow {
 		textField_serverIP.setBounds(70, 189, 122, 28);
 		panel.add(textField_serverIP);
 		textField_serverIP.setColumns(10);
-		
+
 		textField_serverPort = new JTextField();
 		textField_serverPort.setText(default_port);
 		textField_serverPort.setBounds(236, 189, 66, 28);
@@ -239,11 +253,12 @@ public class ClientWindow {
 					JOptionPane.showMessageDialog(frame, "The file name is not valid!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "Please select a directory to save the file", "INFO",
+						JOptionPane.INFORMATION_MESSAGE);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					final String path = fileChooser.getSelectedFile().getAbsolutePath();
-					LOGGER.info("received user saved file path:"+path);
+					LOGGER.info("received user saved file path:" + path);
 					File file = new File(path + File.separator + fileName);
 					if (file.exists()) {
 						JOptionPane.showMessageDialog(frame, "The file already exits", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -298,17 +313,17 @@ public class ClientWindow {
 		});
 		btnFileList.setBounds(151, 266, 122, 26);
 		panel.add(btnFileList);
-		
+
 		JLabel lblBandwidth = new JLabel("Bandwidth");
 		lblBandwidth.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBandwidth.setBounds(317, 302, 66, 28);
 		panel.add(lblBandwidth);
-		
+
 		JLabel lblKbs = new JLabel("KB/S");
 		lblKbs.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblKbs.setBounds(443, 301, 66, 28);
 		panel.add(lblKbs);
-		
+
 		final JButton btnClearScreen = new JButton("Clear Screen");
 		btnClearScreen.setEnabled(false);
 		btnClearScreen.addActionListener(new ActionListener() {
@@ -340,7 +355,7 @@ public class ClientWindow {
 						return;
 					}
 
-					LOGGER.debug("invoke remote object ["+"rmi://" + serverIP + ":" + serverPort + "/register]");
+					LOGGER.debug("invoke remote object [" + "rmi://" + serverIP + ":" + serverPort + "/register]");
 					IRegister register = (IRegister) Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/register");
 
 					// register service port
@@ -366,7 +381,7 @@ public class ClientWindow {
 					peer.setPeer_service_port("2055");
 					peer.setServer_ip(serverIP);
 					peer.setServer_port(serverPort);
-					
+
 					// button enable
 					btnNewButton.setEnabled(true);
 					btnDownloadFiles.setEnabled(true);
@@ -374,15 +389,14 @@ public class ClientWindow {
 					btnClearScreen.setEnabled(true);
 					textField_downloadFileName.setEnabled(true);
 					textField_downloadLimit.setEnabled(true);
-					
-					
+
 					// start thread
 					Thread t = new Thread(new Runnable() {
 
 						public void run() {
 							while (true) {
 								try {
-									if(!peer.sendSignal()) {
+									if (!peer.sendSignal()) {
 										peer.sendReport();
 									}
 									Thread.sleep(10000);
@@ -396,7 +410,7 @@ public class ClientWindow {
 					});
 
 					t.start();
-					
+
 					Thread t1 = new Thread(new Runnable() {
 
 						public void run() {
@@ -436,9 +450,8 @@ public class ClientWindow {
 		btnConnect.setBounds(317, 190, 117, 29);
 		panel.add(btnConnect);
 
-		
 	}
-	
+
 	/**
 	 * Gets the text area.
 	 * 
@@ -456,7 +469,7 @@ public class ClientWindow {
 	public JOptionPane getOptionPane() {
 		return optionPane;
 	}
-	
+
 	/**
 	 * Gets the file chooser.
 	 * 
@@ -486,7 +499,7 @@ public class ClientWindow {
 	public Registry getPeerRegistry() {
 		return peerRegistry;
 	}
-	
+
 	/**
 	 * Gets the progress bar.
 	 * 
@@ -504,7 +517,7 @@ public class ClientWindow {
 	public JFrame getFrame() {
 		return frame;
 	}
-	
+
 	/**
 	 * Gets the label.
 	 * 

@@ -1,4 +1,19 @@
-/*
+/**
+ * NAME: 
+ * 		ServerWindow.java
+ * 
+ * PURPOSE: 
+ * 		Open a GUI window for interacting with users
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		initialize java swing frame and all the components in the frame.
+ * 		implement the event handler of some action such as button clicked.
  * 
  */
 package com.server;

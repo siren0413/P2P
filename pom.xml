@@ -4,7 +4,23 @@
 	<groupId>com.cs550.pa1</groupId>
 	<artifactId>P2P_System</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<build />
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.server.ServerWindow</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>

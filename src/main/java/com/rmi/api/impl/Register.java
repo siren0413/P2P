@@ -1,3 +1,23 @@
+/**
+ * NAME: 
+ * 		PeerTransfer.java
+ * 
+ * PURPOSE: 
+ * 		RMI class. operations between peer and peer.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		1. obtain -- get byte array of the file from other peer.
+ * 		2. getFileLength -- get the length of file which to be download
+ * 		3. getFilePath -- get the file path.
+ * 		4. checkFileAvailable -- check if the file is exist on the peer.
+ * 
+ */
 package com.rmi.api.impl;
 
 import java.net.InetAddress;

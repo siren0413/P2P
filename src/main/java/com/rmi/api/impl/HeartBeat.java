@@ -1,3 +1,23 @@
+/**
+ * NAME: 
+ * 		HeartBeat.java
+ * 
+ * PURPOSE: 
+ * 		RMI class. test whether data is consistent between peer and server.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		1. signal -- verify MD5 coming from peer and MD5 from server side.
+ * 		2. report -- if MD5 is not consistent, then server will update its 
+ * 		   database based on the data coming from peer.
+ * 
+ */
+
 package com.rmi.api.impl;
 
 import java.net.InetAddress;

@@ -1,3 +1,22 @@
+/**
+ * NAME: 
+ * 		ServerTransfer.java
+ * 
+ * PURPOSE: 
+ * 		RMI class. operations between peer and server.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		1. searchFile -- locate which peer has the file, so that we can contact that peer to download.
+ * 		2. listAllFile -- get files that available to download.
+ * 
+ */
+
 package com.rmi.api.impl;
 
 import java.rmi.RemoteException;

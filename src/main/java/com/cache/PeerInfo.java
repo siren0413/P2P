@@ -1,3 +1,20 @@
+/**
+ * NAME: 
+ * 		PeerInfo.java
+ * 
+ * PURPOSE: 
+ * 		java bean which populate data from database.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		populate data from database, each attribute corresponding to the columns in database.
+ * 
+ */
 package com.cache;
 
 public class PeerInfo {

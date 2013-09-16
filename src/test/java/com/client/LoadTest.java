@@ -15,15 +15,15 @@ import com.rmi.api.IServerTransfer;
 
 public class LoadTest {
 
-	private String serverIP = "192.168.1.125";
+	private String serverIP = "192.168.1.18";
 	private String serverPort = "1099";
 
 	public LoadTest() {
 
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Test
+	@SuppressWarnings({})
+	// @Test
 	public void responseTimeTest() throws InterruptedException {
 		Thread.sleep(10000);
 		long start = System.currentTimeMillis();
@@ -43,20 +43,21 @@ public class LoadTest {
 		Thread.sleep(10000);
 		long start = System.currentTimeMillis();
 
-		ExecutorService executor = Executors.newFixedThreadPool(100);
+		ExecutorService executor = Executors.newFixedThreadPool(500);
 		CompletionService completion = new ExecutorCompletionService(executor);
-		for (int i = 0; i < 100; i++) {
+		final int counter = 400;
+		for (int i = 0; i < counter; i++) {
 			completion.submit(new Callable() {
 				public Object call() throws Exception {
 					for (int i = 0; i < 10000; i++) {
-						getFileList();
+						Naming.lookup("rmi://" + serverIP + ":" + serverPort + "/serverTransfer");
 					}
 					return null;
 				}
 			});
 		}
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < counter; i++) {
 			completion.take(); // will block until the next sub task has
 								// completed.
 		}
@@ -103,9 +104,9 @@ public class LoadTest {
 			IServerTransfer serverTransfer = (IServerTransfer) Naming.lookup("rmi://" + serverIP + ":" + serverPort
 					+ "/serverTransfer");
 			List<String> files = serverTransfer.listAllFile();
-//			for (String file : files) {
-//				System.out.println(file);
-//			}
+			// for (String file : files) {
+			// System.out.println(file);
+			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

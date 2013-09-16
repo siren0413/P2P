@@ -1,4 +1,26 @@
-
+/**
+ * NAME: 
+ * 		Peer.java
+ * 
+ * PURPOSE: 
+ * 		implement all the Peer operations.
+ * 
+ * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
+ * 		JRE(1.7) required.
+ * 
+ * PROJECT: 
+ * 		P2P File sharing system
+ * 
+ * ALGORITHM DESCRIPTION: 
+ * 		implement peer operations:
+ * 		1. downloadFile -- download file from other peer.
+ * 		2. shareFile -- share file with other peers.
+ * 		3. sendSignal -- send signal to server make sure the data is consistent.
+ * 		4. sendReport -- send report to server when data is not consistent.
+ * 		5. listServerFile -- list all the files that available to download.
+ * 		6. updateLocalDatabase -- update local database when file delete from disk.
+ * 
+ */
 package com.client;
 
 import java.io.File;
@@ -166,7 +188,7 @@ public class Peer {
 				window.getProgressBar().setVisible(true);
 				window.getProgressBar().setStringPainted(true);
 
-				LOGGER.info("download speed:" + Integer.valueOf(window.getTextField_DownloadLimit().getText()) * 1024 + " KB/S");
+				LOGGER.info("download speed:" + Integer.valueOf(window.getTextField_DownloadLimit().getText())+ " KB/S");
 
 				window.getTextArea().append(SystemUtil.getSimpleTime() + "Start downloading...\n");
 				while (left > 0) {
