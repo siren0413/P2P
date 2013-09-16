@@ -1,9 +1,9 @@
 /**
  * NAME: 
- * 		PeerTransfer.java
+ * 		Register.java
  * 
  * PURPOSE: 
- * 		RMI class. operations between peer and peer.
+ * 		RMI class. register peer to server.
  * 
  * COMPUTER HARDWARE AND/OR SOFTWARE LIMITATIONS: 
  * 		JRE(1.7) required.
@@ -12,8 +12,8 @@
  * 		P2P File sharing system
  * 
  * ALGORITHM DESCRIPTION: 
- * 		1. obtain -- get byte array of the file from other peer.
- * 		2. getFileLength -- get the length of file which to be download
+ * 		1. registerPeer -- register peer info to server database and establish connection.
+ * 		2. unRegisterPeer -- unregister peer and remove the info from database.
  * 		3. getFilePath -- get the file path.
  * 		4. checkFileAvailable -- check if the file is exist on the peer.
  * 

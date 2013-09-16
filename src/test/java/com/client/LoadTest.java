@@ -37,7 +37,7 @@ public class LoadTest {
 		System.out.println(responseTime);
 	}
 
-	@Test
+	//@Test
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void multiPeerResponseTimeTest() throws InterruptedException {
 		Thread.sleep(10000);
